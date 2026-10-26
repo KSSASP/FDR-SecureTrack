@@ -1,0 +1,7 @@
+# Environment files
+.env
+.env.*
+node_modules/
+dist/
+uploads/*
+data/*.db
