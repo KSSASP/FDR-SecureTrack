@@ -8,14 +8,24 @@ import { riskScoringService } from '../services/riskScoringService.js';
 
 const router = Router();
 
-// 1. List Cross-Institution Duplicate Findings (Restricted to Officers and Admins)
-router.get('/', authenticateToken, requireRole(['SUPER_ADMIN', 'REGULATION_OFFICER']), async (req: Request, res: Response): Promise<void> => {
+// 1. List Cross-Institution Duplicate Findings (With Tenant Isolation for Institution Admins)
+router.get('/', authenticateToken, async (req: Request, res: Response): Promise<void> => {
   try {
+    const user = req.user!;
+    const isInstAdmin = user.role === 'INSTITUTION_ADMIN';
     const { status = 'ALL' } = req.query as { status?: string };
 
     let whereClause = '';
     const params: any[] = [];
-    if (status && status !== 'ALL') {
+
+    if (isInstAdmin) {
+      whereClause = 'WHERE (df.institution_id = ? OR df.matched_institution_id = ?)';
+      params.push(user.institution_id, user.institution_id);
+      if (status && status !== 'ALL') {
+        whereClause += ' AND df.status = ?';
+        params.push(status);
+      }
+    } else if (status && status !== 'ALL') {
       whereClause = 'WHERE df.status = ?';
       params.push(status);
     }
@@ -24,9 +34,12 @@ router.get('/', authenticateToken, requireRole(['SUPER_ADMIN', 'REGULATION_OFFIC
       `SELECT df.*,
               f.fdr_number, f.bank_name, f.amount, f.maturity_date,
               i.name as institution_name, i.code as institution_code,
-              f_match.fdr_number as matched_fdr_number, f_match.bank_name as matched_bank_name,
-              f_match.amount as matched_amount, f_match.maturity_date as matched_maturity_date,
-              i_match.name as matched_institution_name, i_match.code as matched_institution_code,
+              f_match.fdr_number as matched_fdr_number, f_match.fdr_number as matching_fdr_number,
+              f_match.bank_name as matched_bank_name, f_match.bank_name as matching_bank_name,
+              f_match.amount as matched_amount, f_match.amount as matching_amount,
+              f_match.maturity_date as matched_maturity_date, f_match.maturity_date as matching_maturity_date,
+              i_match.name as matched_institution_name, i_match.name as matching_institution_name,
+              i_match.code as matched_institution_code, i_match.code as matching_institution_code,
               u.name as reviewed_by_name
        FROM duplicate_findings df
        JOIN fdr_instruments f ON df.fdr_id = f.id
@@ -39,7 +52,27 @@ router.get('/', authenticateToken, requireRole(['SUPER_ADMIN', 'REGULATION_OFFIC
       params
     );
 
-    res.json({ duplicates });
+    // Tenant Isolation: Mask confidential details of other institutions for Institution Admins
+    const sanitized = isInstAdmin
+      ? duplicates.map(d => {
+          const isOwnerOfFdr = d.institution_id === user.institution_id;
+          const isOwnerOfMatched = d.matched_institution_id === user.institution_id;
+          return {
+            ...d,
+            institution_name: isOwnerOfFdr ? d.institution_name : 'Confidential / External Institution',
+            institution_code: isOwnerOfFdr ? d.institution_code : 'CONFIDENTIAL',
+            fdr_number: isOwnerOfFdr ? d.fdr_number : 'FDR-****-***',
+            matched_institution_name: isOwnerOfMatched ? d.matched_institution_name : 'Confidential / External Institution',
+            matching_institution_name: isOwnerOfMatched ? d.matching_institution_name : 'Confidential / External Institution',
+            matched_institution_code: isOwnerOfMatched ? d.matched_institution_code : 'CONFIDENTIAL',
+            matching_institution_code: isOwnerOfMatched ? d.matching_institution_code : 'CONFIDENTIAL',
+            matched_fdr_number: isOwnerOfMatched ? d.matched_fdr_number : 'FDR-****-***',
+            matching_fdr_number: isOwnerOfMatched ? d.matching_fdr_number : 'FDR-****-***'
+          };
+        })
+      : duplicates;
+
+    res.json({ duplicates: sanitized });
   } catch (err: any) {
     console.error('List duplicates error:', err);
     res.status(500).json({ error: 'Failed to retrieve duplicate detection findings' });
@@ -68,7 +101,7 @@ router.post('/:id/resolve', authenticateToken, requireRole(['SUPER_ADMIN', 'REGU
     const { id } = req.params;
     const { status, resolution_notes } = req.body;
 
-    const allowed = ['CONFIRMED_DUPLICATE', 'REVIEWED_LEGITIMATE', 'DISMISSED'];
+    const allowed = ['CONFIRMED_DUPLICATE', 'REVIEWED_LEGITIMATE', 'DISMISSED', 'FALSE_POSITIVE', 'RESOLVED_PERMITTED'];
     if (!allowed.includes(status) || !resolution_notes) {
       res.status(400).json({ error: `Valid status [${allowed.join(', ')}] and scrutiny observations are required` });
       return;
@@ -99,8 +132,11 @@ router.post('/:id/resolve', authenticateToken, requireRole(['SUPER_ADMIN', 'REGU
       );
     }
 
-    // Recalculate risk score
+    // Recalculate risk scores
     await riskScoringService.calculateRisk(finding.fdr_id);
+    if (finding.matched_fdr_id) {
+      await riskScoringService.calculateRisk(finding.matched_fdr_id);
+    }
 
     await auditFromRequest(req, {
       action: 'DUPLICATE_SCRUTINY_DECISION',

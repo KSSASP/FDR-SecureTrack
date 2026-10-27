@@ -157,19 +157,20 @@ export const ReleaseRequestsPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-8">
       {/* Top Banner */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Security Deposit Release & Refund Workflow</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <div className="text-teal-400 text-xs font-bold uppercase tracking-wider mb-1">SETTLEMENT</div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Security Deposit Release & Refund Workflow</h1>
+          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
             Two-tier regulatory clearance: Scrutiny Officer initial recommendation followed by Competent Authority authorization.
           </p>
         </div>
         {isInstAdmin && (
           <button
             onClick={() => setIsSubmitModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors w-fit"
+            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white rounded-xl text-xs font-bold shadow-lg shadow-rose-500/25 transition-all w-fit"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Apply for Deposit Release</span>
@@ -180,75 +181,75 @@ export const ReleaseRequestsPage: React.FC = () => {
       {/* Requests List */}
       <div className="space-y-4">
         {loading ? (
-          <div className="bg-white p-12 text-center rounded-xl border border-slate-200">
-            <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+          <div className="bg-[#121528] p-16 text-center rounded-2xl border border-white/5 shadow-xl">
+            <div className="w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
             <p className="text-xs text-slate-400">Loading release applications...</p>
           </div>
         ) : requests.length === 0 ? (
-          <div className="bg-white p-12 text-center rounded-xl border border-slate-200 text-slate-400">
-            <HandCoins className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="font-semibold text-slate-700">No Release Applications On Record</p>
+          <div className="bg-[#121528] p-16 text-center rounded-2xl border border-white/5 text-slate-400 shadow-xl">
+            <HandCoins className="w-10 h-10 text-slate-600 mx-auto mb-2" />
+            <p className="font-semibold text-white">No Release Applications On Record</p>
             <p className="text-xs text-slate-500 mt-0.5">Institutions can apply for deposit release upon regulatory term completion.</p>
           </div>
         ) : (
           requests.map((rel: any) => (
-            <div key={rel.id} className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-sm text-blue-900 font-mono">Application #{rel.id}</span>
-                  <span className="text-slate-400">•</span>
-                  <span className="font-semibold text-slate-800 text-xs">{rel.institution_name}</span>
+            <div key={rel.id} className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-3.5">
+                <div className="flex items-center gap-2.5">
+                  <span className="font-bold text-sm text-rose-300 font-mono">Application #{rel.id}</span>
+                  <span className="text-slate-600">•</span>
+                  <span className="font-semibold text-white text-xs">{rel.institution_name}</span>
                 </div>
                 <Badge type="status" value={rel.status} />
               </div>
 
               {/* Instrument Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-[#15182D] p-4 rounded-xl border border-white/5 text-xs">
                 <div>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase">Deposit Instrument</span>
-                  <p className="font-mono font-bold text-slate-900 mt-0.5">{rel.fdr_number}</p>
-                  <p className="text-slate-600">{rel.bank_name}</p>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Deposit Instrument</span>
+                  <p className="font-mono font-bold text-white mt-1">{rel.fdr_number}</p>
+                  <p className="text-slate-300">{rel.bank_name}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase">Deposit Amount</span>
-                  <p className="font-bold text-slate-900 text-sm mt-0.5">{formatCurrency(rel.amount)}</p>
-                  <p className="text-slate-500 font-mono">Matured: {rel.maturity_date}</p>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Deposit Amount</span>
+                  <p className="font-bold text-white text-sm mt-1 font-mono">{formatCurrency(rel.amount)}</p>
+                  <p className="text-slate-400 font-mono">Matured: {rel.maturity_date}</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase">Release Classification</span>
-                  <p className="font-semibold text-slate-800 mt-0.5">{rel.request_type?.replace('_', ' ')}</p>
-                  <p className="text-slate-500 font-mono">Ref: {rel.linked_application_ref}</p>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Release Classification</span>
+                  <p className="font-semibold text-rose-300 mt-1">{rel.request_type?.replace('_', ' ')}</p>
+                  <p className="text-slate-400 font-mono">Ref: {rel.linked_application_ref}</p>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-800">
-                <strong>Justification:</strong> {rel.reason}
+              <p className="text-xs text-slate-300">
+                <strong className="text-rose-300">Justification:</strong> {rel.reason}
               </p>
 
               {/* Tier 1 & Tier 2 Observations */}
               {rel.officer_observations && (
-                <div className="p-2.5 rounded bg-blue-50/70 border border-blue-200 text-blue-950 text-xs">
-                  <span className="font-semibold block text-[11px]">Tier-1 Officer Scrutiny Observation:</span>
+                <div className="p-3.5 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-200 text-xs">
+                  <span className="font-semibold block text-[11px] text-blue-300 mb-0.5">Tier-1 Officer Scrutiny Observation:</span>
                   {rel.officer_observations}
                   {rel.first_authorizer_name && (
-                    <span className="text-[10px] block text-blue-800 mt-1">Recommended by: {rel.first_authorizer_name}</span>
+                    <span className="text-[10px] block text-blue-400 mt-1 font-mono">Recommended by: {rel.first_authorizer_name}</span>
                   )}
                 </div>
               )}
 
               {rel.decision_comments && (
-                <div className="p-2.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-950 text-xs">
-                  <span className="font-semibold block text-[11px]">Tier-2 Competent Authority Authorization Order:</span>
+                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-200 text-xs">
+                  <span className="font-semibold block text-[11px] text-emerald-300 mb-0.5">Tier-2 Competent Authority Authorization Order:</span>
                   {rel.decision_comments}
                   {rel.second_authorizer_name && (
-                    <span className="text-[10px] block text-emerald-800 mt-1">Authorized by: {rel.second_authorizer_name}</span>
+                    <span className="text-[10px] block text-emerald-400 mt-1 font-mono">Authorized by: {rel.second_authorizer_name}</span>
                   )}
                 </div>
               )}
 
               {/* Action Bar */}
-              <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-                <span className="text-slate-400 font-mono text-[11px]">Submitted: {rel.submission_date}</span>
+              <div className="flex items-center justify-between pt-3 border-t border-white/5 text-xs flex-wrap gap-2">
+                <span className="text-slate-500 font-mono text-[11px]">Submitted: {rel.submission_date}</span>
 
                 <div className="flex items-center gap-2">
                   {/* Tier 1 Scrutiny Button for Officers */}
@@ -259,7 +260,7 @@ export const ReleaseRequestsPage: React.FC = () => {
                         setReviewStatus('RECOMMENDED');
                         setOfficerObs('');
                       }}
-                      className="px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded shadow-2xs"
+                      className="px-3.5 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-md text-xs"
                     >
                       Tier-1 Officer Scrutiny
                     </button>
@@ -273,7 +274,7 @@ export const ReleaseRequestsPage: React.FC = () => {
                         setAuthDecision('AUTHORIZED');
                         setAuthComments('');
                       }}
-                      className="px-3 py-1 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded shadow-2xs flex items-center gap-1"
+                      className="px-3.5 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl shadow-md flex items-center gap-1.5 text-xs"
                     >
                       <ShieldCheck className="w-3.5 h-3.5" />
                       <span>Competent Authority Decision</span>
@@ -282,10 +283,10 @@ export const ReleaseRequestsPage: React.FC = () => {
 
                   <button
                     onClick={() => navigate(`/fdrs/${rel.fdr_id}`)}
-                    className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded border border-slate-300 flex items-center gap-1"
+                    className="px-3.5 py-1.5 bg-[#1A1D38] hover:bg-[#252A50] text-slate-300 font-semibold rounded-xl border border-white/10 flex items-center gap-1.5 transition-colors"
                   >
                     <span>View FDR Record</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -303,11 +304,11 @@ export const ReleaseRequestsPage: React.FC = () => {
       >
         <form onSubmit={handleOfficerReview} className="space-y-4 text-xs">
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Scrutiny Determination</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Scrutiny Determination</label>
             <select
               value={reviewStatus}
               onChange={(e) => setReviewStatus(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs"
             >
               <option value="RECOMMENDED">Recommend for Final Authorization (Forward to Authority)</option>
               <option value="ADDITIONAL_INFO_REQUIRED">Demand Additional Documents from Institution</option>
@@ -316,29 +317,29 @@ export const ReleaseRequestsPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Scrutiny Observations & Audit Findings</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Scrutiny Observations & Audit Findings</label>
             <textarea
               required
               rows={3}
               placeholder="Confirm completion of course term, absence of pending complaints, and compliance affidavit..."
               value={officerObs}
               onChange={(e) => setOfficerObs(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs placeholder:text-slate-500"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
             <button
               type="button"
               onClick={() => setSelectedForReview(null)}
-              className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium"
+              className="px-4 py-2 rounded-xl border border-white/10 text-slate-400 hover:text-white font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={savingReview}
-              className="px-4 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold shadow-md"
             >
               {savingReview ? 'Recording...' : 'Submit Scrutiny'}
             </button>
@@ -350,73 +351,69 @@ export const ReleaseRequestsPage: React.FC = () => {
       <Modal
         isOpen={Boolean(selectedForAuth)}
         onClose={() => setSelectedForAuth(null)}
-        title="Competent Authority Final Decision"
-        subtitle="Supervisory tier-2 authorization of security deposit release"
+        title="Tier-2 Competent Authority Authorization"
+        subtitle="Final release execution by Super Administrator"
       >
         <form onSubmit={handleSuperAdminAuthorize} className="space-y-4 text-xs">
-          <div className="p-3 bg-amber-50 rounded-lg border border-amber-200 text-amber-900 text-xs">
-            <strong>Regulatory Notice:</strong> Authorization recorded here constitutes an official administrative release decree. It certifies compliance fulfillment. No banking money transfers are executed.
-          </div>
-
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Final Authority Decision</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Final Authorization Determination</label>
             <select
               value={authDecision}
               onChange={(e) => setAuthDecision(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs"
             >
-              <option value="AUTHORIZED">Authorize Full Release of Deposit Instrument</option>
+              <option value="AUTHORIZED">Authorize Release of Deposit (Issue Official Order)</option>
               <option value="REJECTED">Reject Release Order</option>
             </select>
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Supervisory Authorization Comments</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Formal Order Comments & Conditions</label>
             <textarea
               required
               rows={3}
-              placeholder="State formal order reference and authorization basis..."
+              placeholder="State formal executive order reference and dispatch instructions to bank..."
               value={authComments}
               onChange={(e) => setAuthComments(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs placeholder:text-slate-500"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
             <button
               type="button"
               onClick={() => setSelectedForAuth(null)}
-              className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium"
+              className="px-4 py-2 rounded-xl border border-white/10 text-slate-400 hover:text-white font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={savingAuth}
-              className="px-4 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-bold"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold shadow-md"
             >
-              {savingAuth ? 'Recording Order...' : 'Record Authorized Decision'}
+              {savingAuth ? 'Recording...' : 'Authorize Final Release'}
             </button>
           </div>
         </form>
       </Modal>
 
-      {/* Submit Release Request Modal (Institution Admin) */}
+      {/* Submit Application Modal */}
       <Modal
         isOpen={isSubmitModalOpen}
         onClose={() => setIsSubmitModalOpen(false)}
         title="Apply for Security Deposit Release / Refund"
-        subtitle="Submit regulatory discharge application"
+        subtitle="Institutional formal release submission"
       >
         <form onSubmit={handleSubmitRequest} className="space-y-4 text-xs">
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Select Compliant FDR</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Select Eligible Deposit Instrument</label>
             <select
               value={selectedFdrId}
               onChange={(e) => setSelectedFdrId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs"
             >
-              <option value="">-- Choose Verified Deposit --</option>
+              <option value="">-- Choose Verified FDR --</option>
               {myFdrs.map((f: any) => (
                 <option key={f.id} value={f.id}>
                   {f.fdr_number} • {formatCurrency(f.amount)} (Matures: {f.maturity_date})
@@ -426,45 +423,43 @@ export const ReleaseRequestsPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Discharge Classification</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Release Type</label>
             <select
               value={requestType}
               onChange={(e) => setRequestType(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs"
             >
-              <option value="FULL_RELEASE">Full Release (Regulatory Norms Fulfilled)</option>
-              <option value="PARTIAL_REFUND">Partial Refund</option>
-              <option value="REGULATORY_COMPLETION">Moratorium / Inspection Completion</option>
-              <option value="COURT_ORDER">Judicial or Appellate Clearance</option>
+              <option value="FULL_RELEASE">Full Deposit Release & Discharge</option>
+              <option value="PARTIAL_RELEASE">Partial Release / Excess Capital Return</option>
             </select>
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Regulatory Justification Reason</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Regulatory Justification Reason</label>
             <textarea
               required
               rows={3}
-              placeholder="State completion of approved intake, return of original documents, and compliance..."
+              placeholder="State completion of statutory lock-in period, council resolution reference..."
               value={releaseReason}
               onChange={(e) => setReleaseReason(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs placeholder:text-slate-500"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
             <button
               type="button"
               onClick={() => setIsSubmitModalOpen(false)}
-              className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium"
+              className="px-4 py-2 rounded-xl border border-white/10 text-slate-400 hover:text-white font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || !selectedFdrId}
-              className="px-4 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold shadow-md"
             >
-              {submitting ? 'Submitting Application...' : 'Submit Application'}
+              {submitting ? 'Submitting...' : 'Submit Application'}
             </button>
           </div>
         </form>

@@ -139,17 +139,18 @@ export const OfficerWorkbenchPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-8">
       {/* Header */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">Regulation Officer Priority Workbench</h1>
-            <span className="text-[11px] font-semibold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">
+          <div className="text-teal-400 text-xs font-bold uppercase tracking-wider mb-1">SCRUTINY QUEUE</div>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold text-white tracking-tight">Regulation Officer Priority Workbench</h1>
+            <span className="text-[11px] font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2.5 py-0.5 rounded-full">
               {worklist.length} Active Cases
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
             Deterministic prioritization ranking based on maturity countdown, discrepancy findings, cross-institution duplicate alerts, and pending case age.
           </p>
         </div>
@@ -168,10 +169,10 @@ export const OfficerWorkbenchPage: React.FC = () => {
             <button
               key={f.id}
               onClick={() => setFilter(f.id)}
-              className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors ${
+              className={`px-3 py-1.5 rounded-xl font-medium whitespace-nowrap transition-all ${
                 filter === f.id
-                  ? 'bg-blue-700 text-white shadow-2xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-gradient-to-r from-rose-500/80 via-purple-600/90 to-indigo-600 text-white font-semibold shadow-md shadow-purple-600/25'
+                  : 'bg-[#15182D] text-slate-400 hover:text-white border border-white/5'
               }`}
             >
               {f.label}
@@ -183,39 +184,39 @@ export const OfficerWorkbenchPage: React.FC = () => {
       {/* Prioritized Cases List */}
       <div className="space-y-4">
         {loading ? (
-          <div className="bg-white p-12 text-center rounded-xl border border-slate-200">
-            <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+          <div className="bg-[#121528] p-16 text-center rounded-2xl border border-white/5 shadow-xl">
+            <div className="w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
             <p className="text-xs text-slate-400">Evaluating deterministic priority worklist...</p>
           </div>
         ) : worklist.length === 0 ? (
-          <div className="bg-white p-12 text-center rounded-xl border border-slate-200 text-slate-400">
-            <Briefcase className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="font-semibold text-slate-700">No Cases Found</p>
+          <div className="bg-[#121528] p-16 text-center rounded-2xl border border-white/5 text-slate-400 shadow-xl">
+            <Briefcase className="w-10 h-10 text-slate-600 mx-auto mb-2" />
+            <p className="font-semibold text-white">No Cases Found</p>
             <p className="text-xs text-slate-500 mt-0.5">No worklist items match the active filter criteria.</p>
           </div>
         ) : (
           worklist.map((item, idx) => (
             <div
               key={item.fdrId}
-              className={`bg-white rounded-xl p-5 border shadow-xs transition-shadow hover:shadow-md ${
+              className={`bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl transition-all hover:border-white/15 ${
                 item.priorityLabel === 'CRITICAL'
-                  ? 'border-l-4 border-l-rose-600 border-slate-200'
+                  ? 'border-l-4 border-l-rose-500'
                   : item.priorityLabel === 'URGENT'
-                  ? 'border-l-4 border-l-orange-500 border-slate-200'
+                  ? 'border-l-4 border-l-orange-500'
                   : item.priorityLabel === 'NORMAL'
-                  ? 'border-l-4 border-l-blue-600 border-slate-200'
-                  : 'border-l-4 border-l-slate-400 border-slate-200'
+                  ? 'border-l-4 border-l-indigo-500'
+                  : 'border-l-4 border-l-slate-600'
               }`}
             >
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-white/5 pb-3.5">
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="font-bold text-slate-400 text-xs font-mono">#{idx + 1}</span>
+                  <span className="font-bold text-slate-500 text-xs font-mono">#{idx + 1}</span>
                   <Badge type="priority" value={item.priorityLabel} />
-                  <span className="font-mono font-bold text-sm text-blue-900">{item.fdrNumber}</span>
-                  <span className="text-slate-400">•</span>
-                  <span className="font-semibold text-slate-800 text-xs">{item.institutionName}</span>
+                  <span className="font-mono font-bold text-sm text-rose-300">{item.fdrNumber}</span>
+                  <span className="text-slate-600">•</span>
+                  <span className="font-semibold text-white text-xs">{item.institutionName}</span>
                   {item.institutionCode && (
-                    <span className="text-[10px] font-mono text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                    <span className="text-[10px] font-mono text-slate-400 bg-[#15182D] px-2 py-0.5 rounded-full border border-white/5">
                       {item.institutionCode}
                     </span>
                   )}
@@ -224,30 +225,30 @@ export const OfficerWorkbenchPage: React.FC = () => {
                 <div className="flex items-center gap-3 text-xs flex-wrap">
                   {/* Due Date Indicator */}
                   {item.dueDate && (
-                    <div className="flex items-center gap-1 text-slate-500">
-                      <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                      <span>Target Due:</span>
-                      <span className="font-mono font-semibold text-slate-700">{item.dueDate}</span>
+                    <div className="flex items-center gap-1.5 text-slate-400">
+                      <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Target:</span>
+                      <span className="font-mono font-semibold text-slate-200">{item.dueDate}</span>
                     </div>
                   )}
 
                   {/* Case Age */}
                   {item.pendingCaseAgeDays !== undefined && (
-                    <div className="flex items-center gap-1 text-slate-500">
-                      <Clock className="w-3.5 h-3.5 text-slate-400" />
+                    <div className="flex items-center gap-1.5 text-slate-400">
+                      <Clock className="w-3.5 h-3.5 text-slate-500" />
                       <span>Age:</span>
-                      <span className="font-mono font-semibold text-slate-700">{item.pendingCaseAgeDays}d</span>
+                      <span className="font-mono font-semibold text-slate-200">{item.pendingCaseAgeDays}d</span>
                     </div>
                   )}
 
                   {/* Maturity Countdown */}
                   <span
-                    className={`font-mono font-bold px-2 py-0.5 rounded text-[11px] ${
+                    className={`font-mono font-bold px-2.5 py-0.5 rounded-full text-[11px] border ${
                       item.daysToMaturity < 0
-                        ? 'bg-rose-100 text-rose-800'
+                        ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
                         : item.daysToMaturity <= 7
-                        ? 'bg-amber-100 text-amber-800'
-                        : 'bg-blue-50 text-blue-800'
+                        ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                        : 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30'
                     }`}
                   >
                     {item.daysToMaturity < 0
@@ -258,12 +259,12 @@ export const OfficerWorkbenchPage: React.FC = () => {
               </div>
 
               {/* Main Body */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-3 text-xs">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4 text-xs">
                 <div>
                   <p className="text-slate-400 font-medium">Deposit Instrument Details</p>
-                  <p className="font-bold text-slate-900 text-sm mt-0.5">{formatCurrency(item.amount)}</p>
-                  <p className="text-slate-600">{item.bankName} • {item.branchName}</p>
-                  <p className="text-[11px] text-slate-400 mt-1 font-mono">
+                  <p className="font-bold text-white text-sm mt-0.5 font-mono">{formatCurrency(item.amount)}</p>
+                  <p className="text-slate-300">{item.bankName} • {item.branchName}</p>
+                  <p className="text-[11px] text-slate-500 mt-1 font-mono">
                     Matures: {item.maturityDate}
                   </p>
                 </div>
@@ -273,13 +274,13 @@ export const OfficerWorkbenchPage: React.FC = () => {
                   <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                     <Badge type="status" value={item.currentStatus} />
                     <Badge type="risk" value={item.riskLevel} />
-                    <span className="text-[11px] font-mono text-slate-500">Score: {item.riskScore}/100</span>
+                    <span className="text-[11px] font-mono text-slate-400">Score: {item.riskScore}/100</span>
                   </div>
-                  <p className="text-[11px] text-slate-500 mt-1.5">
-                    Assigned Officer: <strong className="text-slate-700">{item.assignedOfficerName || 'Unassigned'}</strong>
+                  <p className="text-[11px] text-slate-400 mt-1.5">
+                    Assigned Officer: <strong className="text-slate-200">{item.assignedOfficerName || 'Unassigned'}</strong>
                   </p>
                   {item.openDuplicatesCount ? (
-                    <p className="text-[11px] text-rose-700 font-semibold mt-0.5 flex items-center gap-1">
+                    <p className="text-[11px] text-rose-400 font-semibold mt-0.5 flex items-center gap-1">
                       <CopyX className="w-3 h-3" />
                       <span>{item.openDuplicatesCount} duplicate finding(s) pending</span>
                     </p>
@@ -287,14 +288,14 @@ export const OfficerWorkbenchPage: React.FC = () => {
                 </div>
 
                 {/* Ranking Reasons Box */}
-                <div className="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                  <p className="font-semibold text-slate-700 text-[11px] uppercase tracking-wider mb-1">
+                <div className="bg-[#15182D] p-3.5 rounded-xl border border-white/5">
+                  <p className="font-semibold text-rose-300 text-[11px] uppercase tracking-wider mb-1.5">
                     Priority Ranking Reasons:
                   </p>
-                  <ul className="space-y-1 text-[11px] text-slate-600">
+                  <ul className="space-y-1 text-[11px] text-slate-300">
                     {item.rankingReasons.map((reason, rIdx) => (
                       <li key={rIdx} className="flex items-start gap-1.5">
-                        <span className="text-blue-600 font-bold">•</span>
+                        <span className="text-rose-400 font-bold">•</span>
                         <span>{reason}</span>
                       </li>
                     ))}
@@ -304,15 +305,15 @@ export const OfficerWorkbenchPage: React.FC = () => {
 
               {/* Recommended Next Actions Row */}
               {item.recommendedActions && item.recommendedActions.length > 0 && (
-                <div className="bg-amber-50/70 border border-amber-200 rounded-lg p-2.5 mb-3 text-xs">
-                  <p className="font-semibold text-amber-900 text-[11px] uppercase tracking-wider mb-1 flex items-center gap-1">
-                    <AlertTriangle className="w-3 h-3 text-amber-700" />
+                <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 mb-3 text-xs">
+                  <p className="font-semibold text-amber-300 text-[11px] uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                    <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
                     <span>Recommended Next Actions:</span>
                   </p>
-                  <ul className="space-y-0.5 text-[11px] text-amber-800">
+                  <ul className="space-y-0.5 text-[11px] text-amber-200">
                     {item.recommendedActions.map((act, aIdx) => (
-                      <li key={aIdx} className="flex items-start gap-1">
-                        <span className="text-amber-700 font-bold">→</span>
+                      <li key={aIdx} className="flex items-start gap-1.5">
+                        <span className="text-amber-400 font-bold">→</span>
                         <span>{act}</span>
                       </li>
                     ))}
@@ -321,18 +322,18 @@ export const OfficerWorkbenchPage: React.FC = () => {
               )}
 
               {/* Action Bar */}
-              <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs flex-wrap gap-2">
-                <span className="text-[11px] text-slate-400 font-mono">
-                  Gate: <strong className="text-slate-600">{item.workflowType}</strong>
+              <div className="flex items-center justify-between pt-3 border-t border-white/5 text-xs flex-wrap gap-2">
+                <span className="text-[11px] text-slate-500 font-mono">
+                  Gate: <strong className="text-slate-300">{item.workflowType}</strong>
                 </span>
 
                 <div className="flex items-center gap-2">
                   {!item.assignedOfficerId && (
                     <button
                       onClick={() => handleAssignToMe(item.fdrId)}
-                      className="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded border border-slate-300 transition-colors flex items-center gap-1"
+                      className="px-3 py-1.5 bg-[#1A1D38] hover:bg-[#252A50] text-slate-300 font-semibold rounded-xl border border-white/10 transition-colors flex items-center gap-1.5"
                     >
-                      <UserCheck className="w-3 h-3" />
+                      <UserCheck className="w-3.5 h-3.5" />
                       <span>Assign to Me</span>
                     </button>
                   )}
@@ -342,9 +343,9 @@ export const OfficerWorkbenchPage: React.FC = () => {
                       setSelectedItem(item);
                       setIsActionModalOpen(true);
                     }}
-                    className="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-semibold rounded border border-emerald-300 transition-colors flex items-center gap-1"
+                    className="px-3 py-1.5 bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 font-semibold rounded-xl border border-emerald-500/30 transition-colors flex items-center gap-1.5"
                   >
-                    <FileCheck className="w-3 h-3" />
+                    <FileCheck className="w-3.5 h-3.5" />
                     <span>Decision</span>
                   </button>
 
@@ -353,18 +354,18 @@ export const OfficerWorkbenchPage: React.FC = () => {
                       setSelectedItem(item);
                       setIsEscalateModalOpen(true);
                     }}
-                    className="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-800 font-semibold rounded border border-rose-300 transition-colors flex items-center gap-1"
+                    className="px-3 py-1.5 bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 font-semibold rounded-xl border border-rose-500/30 transition-colors flex items-center gap-1.5"
                   >
-                    <Flag className="w-3 h-3" />
+                    <Flag className="w-3.5 h-3.5" />
                     <span>Escalate</span>
                   </button>
 
                   <button
                     onClick={() => navigate(`/fdrs/${item.fdrId}`)}
-                    className="px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded shadow-2xs transition-colors flex items-center gap-1"
+                    className="px-3.5 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5"
                   >
                     <span>Full Scrutiny</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -381,20 +382,20 @@ export const OfficerWorkbenchPage: React.FC = () => {
           title={`Record Scrutiny Determination - FDR ${selectedItem.fdrNumber}`}
         >
           <form onSubmit={handleExecuteAction} className="space-y-4">
-            <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs space-y-1">
+            <div className="bg-[#15182D] p-3.5 rounded-xl border border-white/5 text-xs space-y-1 text-slate-300">
               <p><strong>Institution:</strong> {selectedItem.institutionName}</p>
               <p><strong>Amount:</strong> {formatCurrency(selectedItem.amount)}</p>
               <p><strong>Current Status:</strong> {selectedItem.currentStatus}</p>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
                 Action Determination
               </label>
               <select
                 value={actionType}
                 onChange={e => setActionType(e.target.value as any)}
-                className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="w-full px-3.5 py-2.5 text-xs border border-[#2B2F4E] rounded-xl focus:outline-none focus:border-rose-500 bg-[#15182D] text-white"
               >
                 <option value="APPROVE_VERIFIED">Approve & Mark Verified (All Checks Satisfied)</option>
                 <option value="REQUEST_CORRECTION">Request Correction (Document / Field Deficiencies)</option>
@@ -403,8 +404,8 @@ export const OfficerWorkbenchPage: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                Official Scrutiny Observation / Justification <span className="text-rose-500">*</span>
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                Official Scrutiny Observation / Justification <span className="text-rose-400">*</span>
               </label>
               <textarea
                 rows={3}
@@ -412,22 +413,22 @@ export const OfficerWorkbenchPage: React.FC = () => {
                 value={actionComments}
                 onChange={e => setActionComments(e.target.value)}
                 placeholder="State specific findings, verification checks performed, or reasons for correction..."
-                className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3.5 py-2.5 text-xs border border-[#2B2F4E] rounded-xl focus:outline-none focus:border-rose-500 bg-[#15182D] text-white placeholder:text-slate-500"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
               <button
                 type="button"
                 onClick={() => setIsActionModalOpen(false)}
-                className="px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-100 rounded-lg"
+                className="px-4 py-2 text-xs text-slate-400 hover:text-white rounded-xl"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submittingAction}
-                className="px-4 py-1.5 text-xs bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg shadow-2xs disabled:opacity-50"
+                className="px-5 py-2 text-xs bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold rounded-xl shadow-md disabled:opacity-50"
               >
                 {submittingAction ? 'Recording...' : 'Commit Determination'}
               </button>
@@ -444,19 +445,19 @@ export const OfficerWorkbenchPage: React.FC = () => {
           title={`Escalate Case to Competent Authority - FDR ${selectedItem.fdrNumber}`}
         >
           <form onSubmit={handleExecuteEscalate} className="space-y-4">
-            <div className="bg-rose-50 border border-rose-200 rounded-lg p-3 text-xs text-rose-900">
-              <p className="font-semibold flex items-center gap-1 mb-1">
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
+            <div className="bg-rose-500/15 border border-rose-500/30 rounded-xl p-3.5 text-xs text-rose-200">
+              <p className="font-semibold flex items-center gap-1.5 mb-1 text-rose-300">
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
                 <span>Regulatory Escalation Protocol</span>
               </p>
-              <p>
+              <p className="leading-relaxed">
                 Escalating will notify Super Admin leadership and attach a permanent decision evidence trace. Use for irreconcilable duplicate collisions, counterfeit certificates, or persistent non-compliance.
               </p>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                Escalation Justification & Recommendation <span className="text-rose-500">*</span>
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                Escalation Justification & Recommendation <span className="text-rose-400">*</span>
               </label>
               <textarea
                 rows={4}
@@ -464,22 +465,22 @@ export const OfficerWorkbenchPage: React.FC = () => {
                 value={escalateReason}
                 onChange={e => setEscalateReason(e.target.value)}
                 placeholder="Explain why this case requires Super Admin intervention or regulatory panel scrutiny..."
-                className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full px-3.5 py-2.5 text-xs border border-[#2B2F4E] rounded-xl focus:outline-none focus:border-rose-500 bg-[#15182D] text-white placeholder:text-slate-500"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
               <button
                 type="button"
                 onClick={() => setIsEscalateModalOpen(false)}
-                className="px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-100 rounded-lg"
+                className="px-4 py-2 text-xs text-slate-400 hover:text-white rounded-xl"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={submittingEscalate}
-                className="px-4 py-1.5 text-xs bg-rose-700 hover:bg-rose-800 text-white font-bold rounded-lg shadow-2xs disabled:opacity-50"
+                className="px-5 py-2 text-xs bg-gradient-to-r from-rose-600 to-pink-600 hover:opacity-95 text-white font-bold rounded-xl shadow-md disabled:opacity-50"
               >
                 {submittingEscalate ? 'Escalating...' : 'Submit Escalation'}
               </button>

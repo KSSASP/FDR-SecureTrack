@@ -105,48 +105,51 @@ export const NewFdrSubmissionPage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 pb-8">
       {/* Header */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs flex items-center justify-between">
+      <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/fdrs')}
-            className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+            className="p-2 rounded-xl bg-[#1A1D38] hover:bg-[#252A50] text-slate-300 transition-colors border border-white/5"
+            title="Back to Repository"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
           <div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">Register New Security Deposit Instrument</h1>
-            <p className="text-xs text-slate-500 mt-0.5">Submit fixed deposit receipt details for regulatory verification and lifecycle tracking.</p>
+            <div className="text-teal-400 text-xs font-bold uppercase tracking-wider mb-0.5">REGISTRATION</div>
+            <h1 className="text-2xl font-bold text-white tracking-tight">Register New Security Deposit Instrument</h1>
+            <p className="text-xs text-slate-400 mt-0.5">Submit fixed deposit receipt details for regulatory verification and lifecycle tracking.</p>
           </div>
         </div>
       </div>
 
       {/* Form Card */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs">
+      <div className="bg-[#121528] rounded-2xl p-6 sm:p-8 border border-white/5 shadow-xl">
         <form onSubmit={handleSubmit} className="space-y-6 text-xs">
           {/* SECTION 1: INSTITUTION & APPLICATION REF */}
           <div>
-            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b pb-2 mb-4">
-              1. Institutional Identity & Reference
+            <h3 className="text-xs font-bold text-rose-300 uppercase tracking-wider border-b border-white/5 pb-2.5 mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-rose-400"></span>
+              <span>1. Institutional Identity & Reference</span>
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Institution Name <span className="text-rose-600">*</span>
+                <label className="block font-semibold text-slate-300 mb-1.5">
+                  Institution Name <span className="text-rose-400">*</span>
                 </label>
                 {isInstAdmin ? (
                   <input
                     type="text"
                     disabled
                     value={user?.institution_name || ''}
-                    className="w-full px-3 py-2 bg-slate-100 border border-slate-300 rounded-lg text-slate-700 cursor-not-allowed font-medium"
+                    className="w-full px-3.5 py-2.5 bg-[#15182D] border border-white/10 rounded-xl text-slate-400 cursor-not-allowed font-medium"
                   />
                 ) : (
                   <select
                     value={institutionId}
                     onChange={(e) => setInstitutionId(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                    className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500"
                   >
                     {institutions.map(inst => (
                       <option key={inst.id} value={inst.id}>
@@ -158,8 +161,8 @@ export const NewFdrSubmissionPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Linked Application / Approval Reference <span className="text-rose-600">*</span>
+                <label className="block font-semibold text-slate-300 mb-1.5">
+                  Linked Application / Approval Reference <span className="text-rose-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -167,7 +170,7 @@ export const NewFdrSubmissionPage: React.FC = () => {
                   placeholder="e.g. AICTE-APP-2026-DEL-0199"
                   value={appRef}
                   onChange={(e) => setAppRef(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600 font-mono"
+                  className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 font-mono placeholder:text-slate-500"
                 />
               </div>
             </div>
@@ -175,13 +178,14 @@ export const NewFdrSubmissionPage: React.FC = () => {
 
           {/* SECTION 2: BANK & FINANCIAL DETAILS */}
           <div>
-            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b pb-2 mb-4">
-              2. Bank Instrument Specifications
+            <h3 className="text-xs font-bold text-rose-300 uppercase tracking-wider border-b border-white/5 pb-2.5 mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+              <span>2. Bank Instrument Specifications</span>
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  FDR Number / Receipt Serial <span className="text-rose-600">*</span>
+                <label className="block font-semibold text-slate-300 mb-1.5">
+                  FDR Number / Receipt Serial <span className="text-rose-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -189,18 +193,18 @@ export const NewFdrSubmissionPage: React.FC = () => {
                   placeholder="e.g. FDR-SBI-2026-99011"
                   value={fdrNumber}
                   onChange={(e) => setFdrNumber(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600 font-mono font-bold"
+                  className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 font-mono font-bold placeholder:text-slate-500"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Issuing Bank <span className="text-rose-600">*</span>
+                <label className="block font-semibold text-slate-300 mb-1.5">
+                  Issuing Bank <span className="text-rose-400">*</span>
                 </label>
                 <select
                   value={bankName}
                   onChange={(e) => setBankName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                  className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500"
                 >
                   {popularBanks.map(b => (
                     <option key={b} value={b}>{b}</option>
@@ -209,19 +213,19 @@ export const NewFdrSubmissionPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Branch Name</label>
+                <label className="block font-semibold text-slate-300 mb-1.5">Branch Name</label>
                 <input
                   type="text"
                   placeholder="e.g. Parliament Street, New Delhi"
                   value={branchName}
                   onChange={(e) => setBranchName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                  className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 placeholder:text-slate-500"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Deposit Principal Amount (INR) <span className="text-rose-600">*</span>
+                <label className="block font-semibold text-slate-300 mb-1.5">
+                  Deposit Principal Amount (INR) <span className="text-rose-400">*</span>
                 </label>
                 <input
                   type="number"
@@ -231,16 +235,16 @@ export const NewFdrSubmissionPage: React.FC = () => {
                   placeholder="e.g. 5000000"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600 font-mono font-bold"
+                  className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 font-mono font-bold placeholder:text-slate-500"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Deposit Type</label>
+                <label className="block font-semibold text-slate-300 mb-1.5">Deposit Type</label>
                 <select
                   value={depositType}
                   onChange={(e) => setDepositType(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                  className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500"
                 >
                   <option value="SECURITY_DEPOSIT">Security Deposit</option>
                   <option value="PERFORMANCE_GUARANTEE">Performance Bank Guarantee</option>
@@ -249,14 +253,14 @@ export const NewFdrSubmissionPage: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">Interest Rate (% p.a.)</label>
+                <label className="block font-semibold text-slate-300 mb-1.5">Interest Rate (% p.a.)</label>
                 <input
                   type="number"
                   step="0.01"
                   placeholder="e.g. 7.25"
                   value={interestRate}
                   onChange={(e) => setInterestRate(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600 font-mono"
+                  className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 font-mono placeholder:text-slate-500"
                 />
               </div>
             </div>
@@ -264,50 +268,51 @@ export const NewFdrSubmissionPage: React.FC = () => {
 
           {/* SECTION 3: VALIDITY DATES */}
           <div>
-            <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b pb-2 mb-4">
-              3. Validity Period & Chronology
+            <h3 className="text-xs font-bold text-rose-300 uppercase tracking-wider border-b border-white/5 pb-2.5 mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-teal-400"></span>
+              <span>3. Validity Period & Chronology</span>
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Issue Date <span className="text-rose-600">*</span>
+                <label className="block font-semibold text-slate-300 mb-1.5">
+                  Issue Date <span className="text-rose-400">*</span>
                 </label>
                 <input
                   type="date"
                   required
                   value={issueDate}
                   onChange={(e) => setIssueDate(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600 font-mono"
+                  className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 font-mono"
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-slate-700 mb-1">
-                  Maturity Date <span className="text-rose-600">*</span>
+                <label className="block font-semibold text-slate-300 mb-1.5">
+                  Maturity Date <span className="text-rose-400">*</span>
                 </label>
                 <input
                   type="date"
                   required
                   value={maturityDate}
                   onChange={(e) => setMaturityDate(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600 font-mono"
+                  className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 font-mono"
                 />
               </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t flex items-center justify-end gap-3">
+          <div className="pt-5 border-t border-white/5 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={() => navigate('/fdrs')}
-              className="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium transition-colors"
+              className="px-4 py-2.5 rounded-xl border border-white/10 bg-[#1A1D38] text-slate-300 hover:bg-[#252A50] font-medium transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold transition-colors shadow-xs flex items-center gap-1.5"
+              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold transition-all shadow-lg shadow-rose-500/25 flex items-center gap-2"
             >
               <CheckCircle2 className="w-4 h-4" />
               <span>{loading ? 'Validating & Submitting...' : 'Register Instrument'}</span>

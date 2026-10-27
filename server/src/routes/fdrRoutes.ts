@@ -179,8 +179,13 @@ router.get('/:id', authenticateToken, async (req: Request, res: Response): Promi
     let duplicateFindings: any[] = [];
     if (req.user!.role === 'SUPER_ADMIN' || req.user!.role === 'REGULATION_OFFICER') {
       duplicateFindings = await query<any>(
-        `SELECT df.*, i_matched.name as matched_institution_name, f_matched.fdr_number as matched_fdr_number,
-                f_matched.amount as matched_amount, f_matched.bank_name as matched_bank
+        `SELECT df.*, i_matched.name as matched_institution_name, i_matched.name as matching_institution_name,
+                i_matched.code as matched_institution_code, i_matched.code as matching_institution_code,
+                f_matched.fdr_number as matched_fdr_number, f_matched.fdr_number as matching_fdr_number,
+                f_matched.amount as matched_amount, f_matched.amount as matching_amount,
+                f_matched.bank_name as matched_bank, f_matched.bank_name as matched_bank_name,
+                f_matched.bank_name as matching_bank_name,
+                f_matched.maturity_date as matched_maturity_date
          FROM duplicate_findings df
          JOIN institutions i_matched ON df.matched_institution_id = i_matched.id
          JOIN fdr_instruments f_matched ON df.matched_fdr_id = f_matched.id

@@ -100,24 +100,30 @@ export const DuplicateReviewPage: React.FC = () => {
         return { signals: parsed, matchedFields: [], differingFields: [] };
       }
       return parsed;
-    } catch (_) {
-      return { signals: [String(raw)], matchedFields: [], differingFields: [] };
+    } catch {
+      return { signals: [], matchedFields: [], differingFields: [] };
     }
   };
 
   return (
-    <div className="space-y-6">
-      {/* Top Banner */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-6 pb-8">
+      {/* Header */}
+      <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Cross-Institution Duplicate Detection & Collision Review</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Supervisory review workbench identifying multi-institution instrument collisions, normalized number overlaps, and certificate binary matches.
+          <div className="text-teal-400 text-xs font-bold uppercase tracking-wider mb-1">FRAUD PREVENTION</div>
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold text-white tracking-tight">Cross-Institution Duplicate Collision Review</h1>
+            <span className="text-[11px] font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 px-2.5 py-0.5 rounded-full">
+              {duplicates.length} Flagged
+            </span>
+          </div>
+          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
+            Cryptographic SHA-256 document hashing, normalized identifier cross-checks, and explainable multi-signal similarity matching.
           </p>
         </div>
         <button
           onClick={fetchDuplicates}
-          className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-300 transition-colors w-fit flex items-center gap-1.5 text-xs font-semibold"
+          className="p-2.5 bg-[#1A1D38] hover:bg-[#252A50] text-slate-300 rounded-xl border border-white/10 transition-colors w-fit flex items-center gap-2 text-xs font-semibold"
           title="Refresh Duplicate Log"
         >
           <RotateCw className="w-3.5 h-3.5" />
@@ -126,11 +132,11 @@ export const DuplicateReviewPage: React.FC = () => {
       </div>
 
       {/* Impartiality / Neutrality Notice */}
-      <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-4 flex items-start gap-3 text-xs text-blue-900">
-        <Info className="w-5 h-5 text-blue-700 shrink-0 mt-0.5" />
+      <div className="bg-[#101935] border border-blue-500/20 rounded-2xl p-4 flex items-start gap-3.5 text-xs text-blue-200 shadow-lg">
+        <Info className="w-5 h-5 text-blue-400 shrink-0 mt-0.5" />
         <div>
-          <p className="font-bold text-blue-950">Review-Priority Notification & Neutrality Protocol</p>
-          <p className="text-blue-800 mt-0.5 leading-relaxed">
+          <p className="font-bold text-white">Review-Priority Notification & Neutrality Protocol</p>
+          <p className="text-slate-300 mt-0.5 leading-relaxed">
             Duplicate detection findings serve strictly as review-priority indicators to assist officers in identifying potential re-submissions, split deposits, or cross-institution collisions. Potential matches must never be automatically classified as fraud without rigorous human scrutiny and formal bank confirmation.
           </p>
         </div>
@@ -147,10 +153,10 @@ export const DuplicateReviewPage: React.FC = () => {
           <button
             key={tab.id}
             onClick={() => setFilterCategory(tab.id as any)}
-            className={`px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition-colors ${
+            className={`px-3.5 py-2 rounded-xl font-medium whitespace-nowrap transition-all ${
               filterCategory === tab.id
-                ? 'bg-blue-700 text-white shadow-2xs font-bold'
-                : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
+                ? 'bg-gradient-to-r from-rose-500/80 via-purple-600/90 to-indigo-600 text-white shadow-md shadow-purple-600/25 font-bold'
+                : 'bg-[#15182D] border border-white/5 text-slate-400 hover:text-white'
             }`}
           >
             {tab.label}
@@ -161,14 +167,14 @@ export const DuplicateReviewPage: React.FC = () => {
       {/* Duplicate Findings List */}
       <div className="space-y-4">
         {loading ? (
-          <div className="bg-white p-12 text-center rounded-xl border border-slate-200">
-            <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+          <div className="bg-[#121528] p-16 text-center rounded-2xl border border-white/5 shadow-xl">
+            <div className="w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
             <p className="text-xs text-slate-400">Scanning repository for cross-institution collisions...</p>
           </div>
         ) : filteredDuplicates.length === 0 ? (
-          <div className="bg-white p-12 text-center rounded-xl border border-slate-200 text-slate-400">
-            <CheckCircle2 className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-            <p className="font-semibold text-slate-700">No Matching Findings in Active Filter</p>
+          <div className="bg-[#121528] p-16 text-center rounded-2xl border border-white/5 text-slate-400 shadow-xl">
+            <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
+            <p className="font-semibold text-white">No Matching Findings in Active Filter</p>
             <p className="text-xs text-slate-500 mt-0.5">All scrutinized records in this category meet unique validity requirements.</p>
           </div>
         ) : (
@@ -177,142 +183,149 @@ export const DuplicateReviewPage: React.FC = () => {
             return (
               <div
                 key={df.id}
-                className={`bg-white rounded-xl p-5 border shadow-xs transition-shadow hover:shadow-md ${
+                className={`bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl transition-all hover:border-white/15 ${
                   df.match_category === 'EXACT_DUPLICATE'
-                    ? 'border-l-4 border-l-rose-600 border-slate-200'
+                    ? 'border-l-4 border-l-rose-500'
                     : df.match_category === 'STRONG_POTENTIAL_MATCH'
-                    ? 'border-l-4 border-l-amber-500 border-slate-200'
-                    : 'border-l-4 border-l-slate-400 border-slate-200'
+                    ? 'border-l-4 border-l-amber-500'
+                    : 'border-l-4 border-l-slate-600'
                 }`}
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`px-2.5 py-0.5 rounded font-bold text-xs uppercase tracking-wide ${
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/5 pb-3.5">
+                  <div className="flex items-center gap-2.5 flex-wrap">
+                    <span className={`px-3 py-1 rounded-full font-bold text-xs uppercase tracking-wider ${
                       df.match_category === 'EXACT_DUPLICATE'
-                        ? 'bg-rose-600 text-white'
+                        ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                         : df.match_category === 'STRONG_POTENTIAL_MATCH'
-                        ? 'bg-amber-500 text-white'
-                        : 'bg-slate-600 text-white'
+                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                        : 'bg-slate-500/20 text-slate-300 border border-slate-500/40'
                     }`}>
                       {df.match_category?.replace(/_/g, ' ')}
                     </span>
-                    <span className="font-semibold text-slate-800 text-xs">
-                      Multi-Signal Similarity Index: <strong className="text-rose-700">{(df.similarity_score * 100).toFixed(0)}%</strong>
+                    <span className="font-semibold text-slate-300 text-xs">
+                      Multi-Signal Similarity Index: <strong className="text-rose-400 font-mono">{(df.similarity_score * 100).toFixed(0)}%</strong>
                     </span>
                   </div>
                   <Badge type="status" value={df.status} />
                 </div>
 
                 {/* Collision Explanation */}
-                <p className="text-xs text-slate-800 font-medium my-3 leading-relaxed bg-slate-50/70 p-3 rounded-lg border border-slate-200">
-                  <strong className="text-slate-900 block mb-0.5">Scrutiny Reason:</strong>
+                <div className="text-xs text-slate-200 font-medium my-3.5 leading-relaxed bg-[#15182D] p-3.5 rounded-xl border border-white/5">
+                  <strong className="text-rose-300 block mb-1">Scrutiny Reason:</strong>
                   {df.reason}
-                </p>
+                </div>
 
                 {/* Side-by-Side Comparison Matrix */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg border border-slate-200 text-xs my-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-[#15182D] p-4 rounded-xl border border-white/5 text-xs my-3.5">
                   <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold text-blue-700 uppercase tracking-wider block border-b border-blue-200 pb-1">
+                    <span className="text-[10px] font-bold text-rose-300 uppercase tracking-wider block border-b border-white/10 pb-1">
                       1. Subject Instrument Under Review
                     </span>
-                    <p className="font-mono font-bold text-blue-900 text-sm">{df.fdr_number}</p>
-                    <p className="font-semibold text-slate-800">{df.institution_name} {df.institution_code ? `(${df.institution_code})` : ''}</p>
-                    <p className="text-slate-600">{df.bank_name}</p>
-                    <p className="font-bold text-slate-900">{formatCurrency(df.amount)}</p>
-                    <span className="text-[11px] font-mono text-slate-500 block">Maturity Date: {df.maturity_date}</span>
+                    <p className="font-mono font-bold text-rose-300 text-sm">{df.fdr_number}</p>
+                    <p className="font-semibold text-white">{df.institution_name} {df.institution_code ? `(${df.institution_code})` : ''}</p>
+                    <p className="text-slate-400">{df.bank_name}</p>
+                    <p className="font-bold text-white font-mono">{formatCurrency(df.amount)}</p>
+                    <button
+                      onClick={() => navigate(`/fdrs/${df.fdr_id}`)}
+                      className="mt-2 text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1"
+                    >
+                      <span>Open Subject Case</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </button>
                   </div>
 
-                  <div className="border-t md:border-t-0 md:border-l md:pl-4 border-slate-200 pt-3 md:pt-0 space-y-1.5">
-                    <span className="text-[10px] font-bold text-rose-700 uppercase tracking-wider block border-b border-rose-200 pb-1">
-                      2. Correlating Registered Instrument
+                  <div className="space-y-1.5 border-t md:border-t-0 md:border-l border-white/10 pt-3 md:pt-0 md:pl-4">
+                    <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider block border-b border-white/10 pb-1">
+                      2. Conflicting Match Instrument
                     </span>
-                    <p className="font-mono font-bold text-rose-900 text-sm">{df.matched_fdr_number}</p>
-                    <p className="font-semibold text-slate-800">{df.matched_institution_name} {df.matched_institution_code ? `(${df.matched_institution_code})` : ''}</p>
-                    <p className="text-slate-600">{df.matched_bank_name}</p>
-                    <p className="font-bold text-slate-900">{formatCurrency(df.matched_amount)}</p>
-                    <span className="text-[11px] font-mono text-slate-500 block">Maturity Date: {df.matched_maturity_date}</span>
+                    <p className="font-mono font-bold text-purple-300 text-sm">{df.matched_fdr_number || df.matching_fdr_number}</p>
+                    <p className="font-semibold text-white">{(df.matched_institution_name || df.matching_institution_name)} {(df.matched_institution_code || df.matching_institution_code) ? `(${df.matched_institution_code || df.matching_institution_code})` : ''}</p>
+                    <p className="text-slate-400">{df.matched_bank_name || df.matching_bank_name}</p>
+                    <p className="font-bold text-white font-mono">{formatCurrency(df.matched_amount ?? df.matching_amount)}</p>
+                    <button
+                      onClick={() => navigate(`/fdrs/${df.matched_fdr_id}`)}
+                      className="mt-2 text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1"
+                    >
+                      <span>Open Conflicting Case</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </button>
                   </div>
                 </div>
 
-                {/* Matched vs Differing Attributes Breakdown */}
-                {((parsed.matchedFields && parsed.matchedFields.length > 0) || (parsed.differingFields && parsed.differingFields.length > 0)) && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs mb-3">
-                    {/* Matched Fields */}
-                    {parsed.matchedFields && parsed.matchedFields.length > 0 && (
-                      <div className="bg-emerald-50/60 border border-emerald-200 rounded-lg p-3">
-                        <span className="text-[10px] font-bold text-emerald-900 uppercase tracking-wider block mb-1.5 flex items-center gap-1">
-                          <Check className="w-3.5 h-3.5 text-emerald-700" />
-                          <span>Matching Parameters ({parsed.matchedFields.length})</span>
-                        </span>
-                        <ul className="space-y-1 text-[11px] text-emerald-900">
-                          {parsed.matchedFields.map((mf: any, mIdx: number) => (
-                            <li key={mIdx} className="flex items-center justify-between bg-white/70 px-2 py-1 rounded border border-emerald-100">
-                              <span className="font-semibold">{mf.fieldLabel || mf.field}:</span>
-                              <span className="font-mono text-emerald-800">{String(mf.targetValue)}</span>
-                            </li>
-                          ))}
-                        </ul>
+                {/* Signals and Matched vs Differing Breakdown */}
+                {parsed && (
+                  <div className="space-y-2 text-xs mb-3">
+                    {/* Matching Signals pills */}
+                    {parsed.signals && parsed.signals.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 my-2">
+                        {parsed.signals.map((sig: any, idx: number) => (
+                          <span key={idx} className="px-2.5 py-1 rounded-lg bg-[#0E1020] border border-white/10 text-slate-300 font-mono text-[10px] flex items-center gap-1.5">
+                            <span className="w-1 h-1 rounded-full bg-rose-400" />
+                            {typeof sig === 'string' ? sig : JSON.stringify(sig)}
+                          </span>
+                        ))}
                       </div>
                     )}
 
-                    {/* Differing Fields */}
-                    {parsed.differingFields && parsed.differingFields.length > 0 && (
-                      <div className="bg-slate-100/70 border border-slate-200 rounded-lg p-3">
-                        <span className="text-[10px] font-bold text-slate-700 uppercase tracking-wider block mb-1.5 flex items-center gap-1">
-                          <ArrowRightLeft className="w-3.5 h-3.5 text-slate-600" />
-                          <span>Differing Parameters ({parsed.differingFields.length})</span>
-                        </span>
-                        <ul className="space-y-1 text-[11px] text-slate-700">
-                          {parsed.differingFields.map((dfField: any, dIdx: number) => (
-                            <li key={dIdx} className="flex items-center justify-between bg-white px-2 py-1 rounded border border-slate-200">
-                              <span className="font-semibold">{dfField.fieldLabel || dfField.field}:</span>
-                              <span className="font-mono text-slate-600 truncate max-w-[140px]" title={`${dfField.targetValue} vs ${dfField.candidateValue}`}>
-                                {String(dfField.targetValue)} ≠ {String(dfField.candidateValue)}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
+                    {(parsed.matchedFields?.length > 0 || parsed.differingFields?.length > 0) && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {parsed.matchedFields && parsed.matchedFields.length > 0 && (
+                          <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 text-emerald-300">
+                            <span className="font-bold uppercase tracking-wider text-[10px] block mb-1">
+                              ✓ Identical Attributes
+                            </span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {parsed.matchedFields.map((f: any, i: number) => {
+                                const label = typeof f === 'string' ? f : (f.fieldLabel || f.field || JSON.stringify(f));
+                                const detail = typeof f === 'object' && f.targetValue !== undefined ? ` (${f.targetValue})` : '';
+                                return (
+                                  <span key={i} className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px]">
+                                    {label}{detail}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+
+                        {parsed.differingFields && parsed.differingFields.length > 0 && (
+                          <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-amber-300">
+                            <span className="font-bold uppercase tracking-wider text-[10px] block mb-1">
+                              ≠ Differing Attributes
+                            </span>
+                            <div className="flex flex-wrap gap-1.5">
+                              {parsed.differingFields.map((f: any, i: number) => {
+                                const label = typeof f === 'string' ? f : (f.fieldLabel || f.field || JSON.stringify(f));
+                                const diffDetail = typeof f === 'object' && f.targetValue !== undefined && f.candidateValue !== undefined ? ` (${f.targetValue} vs ${f.candidateValue})` : '';
+                                return (
+                                  <span key={i} className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px]">
+                                    {label}{diffDetail}
+                                  </span>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
                 )}
 
-                {/* Recommended Officer Action */}
-                {parsed.recommendedAction && (
-                  <div className="bg-amber-50/70 border border-amber-200 rounded-lg p-2.5 text-xs text-amber-900 mb-3 flex items-start gap-1.5">
-                    <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
-                    <div>
-                      <strong className="block text-[11px] uppercase tracking-wider text-amber-950 font-bold">Recommended Scrutiny Procedure:</strong>
-                      <p className="text-[11px] text-amber-900 mt-0.5">{parsed.recommendedAction}</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Action Bar */}
-                <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs flex-wrap gap-2">
-                  <span className="text-[11px] text-slate-500">
-                    Logged: <strong className="font-mono">{new Date(df.created_at).toLocaleDateString()}</strong>
-                    {df.reviewed_by_name && (
-                      <span> • Reviewed by: <strong>{df.reviewed_by_name}</strong></span>
-                    )}
+                {/* Actions */}
+                <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs flex-wrap gap-2">
+                  <span className="text-[11px] text-slate-500 font-mono">
+                    Logged on {new Date(df.created_at).toLocaleDateString()}
                   </span>
-
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => {
                         setSelectedFinding(df);
                         setIsResolveModalOpen(true);
                       }}
-                      className="px-3 py-1 bg-white hover:bg-slate-100 text-slate-800 font-semibold rounded border border-slate-300 shadow-2xs"
+                      className="px-4 py-2 bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold rounded-xl transition-all shadow-md flex items-center gap-1.5"
                     >
-                      Record Ruling
-                    </button>
-                    <button
-                      onClick={() => navigate(`/fdrs/${df.fdr_id}`)}
-                      className="px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded shadow-2xs flex items-center gap-1"
-                    >
-                      <span>Open Subject Case</span>
-                      <ExternalLink className="w-3 h-3" />
+                      <Check className="w-3.5 h-3.5" />
+                      <span>Resolve Collision</span>
                     </button>
                   </div>
                 </div>
@@ -322,57 +335,70 @@ export const DuplicateReviewPage: React.FC = () => {
         )}
       </div>
 
-      {/* Scrutiny Decision Modal */}
-      <Modal
-        isOpen={isResolveModalOpen}
-        onClose={() => setIsResolveModalOpen(false)}
-        title="Record Duplicate Scrutiny Determination"
-        subtitle="Formal administrative ruling on cross-institution duplicate finding"
-      >
-        <form onSubmit={handleResolveDuplicate} className="space-y-4 text-xs">
-          <div>
-            <label className="block font-semibold text-slate-700 mb-1">Scrutiny Ruling</label>
-            <select
-              value={resolutionStatus}
-              onChange={(e) => setResolutionStatus(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
-            >
-              <option value="CONFIRMED_DUPLICATE">Confirmed Duplicate Instrument (Apply Regulatory Deficiency Hold)</option>
-              <option value="REVIEWED_LEGITIMATE">Reviewed & Verified Legitimate (Independent Coincidental Serial)</option>
-              <option value="DISMISSED">Dismissed / Administrative Duplicate</option>
-            </select>
-          </div>
+      {/* Resolution Modal */}
+      {selectedFinding && (
+        <Modal
+          isOpen={isResolveModalOpen}
+          onClose={() => setIsResolveModalOpen(false)}
+          title="Resolve Duplicate Finding"
+        >
+          <form onSubmit={handleResolveDuplicate} className="space-y-4">
+            <div className="bg-[#15182D] p-3.5 rounded-xl border border-white/5 text-xs space-y-1 text-slate-300">
+              <p><strong>Subject:</strong> {selectedFinding.fdr_number} ({selectedFinding.institution_name})</p>
+              <p><strong>Collision Match:</strong> {selectedFinding.matched_fdr_number || selectedFinding.matching_fdr_number} ({selectedFinding.matched_institution_name || selectedFinding.matching_institution_name})</p>
+              <p><strong>Detection Type:</strong> {selectedFinding.match_category?.replace(/_/g, ' ')}</p>
+            </div>
 
-          <div>
-            <label className="block font-semibold text-slate-700 mb-1">Mandatory Explanatory Scrutiny Observations <span className="text-rose-500">*</span></label>
-            <textarea
-              required
-              rows={3}
-              placeholder="Record specific findings from physical certificates, issuing branch verification, or reason for clearance..."
-              value={resolutionNotes}
-              onChange={(e) => setResolutionNotes(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
-            />
-          </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                Resolution Disposition
+              </label>
+              <select
+                value={resolutionStatus}
+                onChange={(e) => setResolutionStatus(e.target.value)}
+                className="w-full px-3.5 py-2.5 text-xs bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500"
+              >
+                <option value="CONFIRMED_DUPLICATE">Confirmed Duplicate (Illegal Multi-Registration / Hold)</option>
+                <option value="REVIEWED_LEGITIMATE">Reviewed & Legitimate (Authorized Split / Genuine Multi-Branch)</option>
+                <option value="DISMISSED">Dismiss as False Positive (Unrelated Instruments / Verified Valid)</option>
+                <option value="FALSE_POSITIVE">False Positive (Distinct Instruments with Accidental Collisions)</option>
+                <option value="RESOLVED_PERMITTED">Resolved & Permitted (Documented Regulatory Exemption Granted)</option>
+              </select>
+            </div>
 
-          <div className="flex justify-end gap-2 pt-2">
-            <button
-              type="button"
-              onClick={() => setIsResolveModalOpen(false)}
-              className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={saving}
-              className="px-4 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold"
-            >
-              {saving ? 'Recording Ruling...' : 'Record Ruling'}
-            </button>
-          </div>
-        </form>
-      </Modal>
+            <div>
+              <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5">
+                Scrutiny Observations & Traceability Justification <span className="text-rose-400">*</span>
+              </label>
+              <textarea
+                rows={4}
+                required
+                value={resolutionNotes}
+                onChange={(e) => setResolutionNotes(e.target.value)}
+                placeholder="Document verification findings, bank contact details, officer observations, or authorization rationale..."
+                className="w-full px-3.5 py-2.5 text-xs bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 placeholder:text-slate-500"
+              />
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => setIsResolveModalOpen(false)}
+                className="px-4 py-2 text-xs text-slate-400 hover:text-white rounded-xl"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="px-5 py-2 bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold rounded-xl text-xs shadow-md disabled:opacity-50"
+              >
+                {saving ? 'Recording...' : 'Commit Resolution'}
+              </button>
+            </div>
+          </form>
+        </Modal>
+      )}
     </div>
   );
 };

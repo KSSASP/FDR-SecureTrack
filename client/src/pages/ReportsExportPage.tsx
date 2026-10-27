@@ -79,19 +79,20 @@ export const ReportsExportPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-8">
       {/* Top Banner */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Compliance Reports & CSV Export</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Generate and download certified relational database exports with customizable date ranges and regulatory status filters.
+          <div className="text-teal-400 text-xs font-bold uppercase tracking-wider mb-1">GOVERNANCE & AUDIT EXPORTS</div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Compliance Reports & CSV Export</h1>
+          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
+            Generate and download certified relational database exports with customizable date ranges and regulatory status filters. Formula injection protected.
           </p>
         </div>
         <button
           onClick={handleExportCsv}
           disabled={exporting}
-          className="flex items-center gap-1.5 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white rounded-lg text-xs font-bold shadow-xs transition-colors w-fit"
+          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:opacity-95 disabled:opacity-50 text-white rounded-xl text-xs font-bold shadow-lg shadow-emerald-500/25 transition-all w-fit"
         >
           <Download className="w-4 h-4" />
           <span>{exporting ? 'Exporting CSV...' : 'Download Official CSV'}</span>
@@ -99,15 +100,18 @@ export const ReportsExportPage: React.FC = () => {
       </div>
 
       {/* Filter Parameters Form */}
-      <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs space-y-4">
-        <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b pb-2">Report Parameters</h3>
+      <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl space-y-4">
+        <h3 className="text-xs font-bold text-rose-300 uppercase tracking-wider border-b border-white/5 pb-2.5 flex items-center gap-2">
+          <Filter className="w-3.5 h-3.5 text-rose-400" />
+          <span>Report Parameters</span>
+        </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Status Filter</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Status Filter</label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-xs text-white focus:outline-none focus:border-rose-500"
             >
               <option value="">All Statuses</option>
               <option value="VERIFIED">Verified & Active</option>
@@ -118,11 +122,11 @@ export const ReportsExportPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Issuing Bank</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Issuing Bank</label>
             <select
               value={bankName}
               onChange={(e) => setBankName(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-xs text-white focus:outline-none focus:border-rose-500"
             >
               <option value="">All Banks</option>
               <option value="State Bank of India">State Bank of India</option>
@@ -135,64 +139,66 @@ export const ReportsExportPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Maturity From</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Maturity From</label>
             <input
               type="date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-mono"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-xs text-white font-mono focus:outline-none focus:border-rose-500"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Maturity Until</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Maturity Until</label>
             <input
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs font-mono"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-xs text-white font-mono focus:outline-none focus:border-rose-500"
             />
           </div>
         </div>
       </div>
 
       {/* Preview Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
+      <div className="bg-[#121528] rounded-2xl border border-white/5 shadow-xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-white/5 bg-[#0E1020] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Live Dataset Preview</h3>
-            <p className="text-xs text-slate-500">Sample preview of database rows matching current parameters</p>
+            <h3 className="text-sm font-bold text-white tracking-wide">Live Dataset Preview</h3>
+            <p className="text-xs text-slate-400">Sample preview of database rows matching current parameters</p>
           </div>
-          <span className="text-xs text-slate-500 font-mono">Showing {previewRows.length} sample rows</span>
+          <span className="text-xs text-slate-400 font-mono bg-[#15182D] px-3 py-1 rounded-full border border-white/5">
+            Showing {previewRows.length} sample rows
+          </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100 text-slate-600 font-semibold uppercase text-[10px]">
+            <thead className="bg-[#15182D] text-slate-400 font-semibold uppercase text-[10px]">
               <tr>
-                <th className="py-2.5 px-4">FDR Number</th>
-                <th className="py-2.5 px-4">Institution</th>
-                <th className="py-2.5 px-4">Bank</th>
-                <th className="py-2.5 px-4">Amount</th>
-                <th className="py-2.5 px-4">Maturity Date</th>
-                <th className="py-2.5 px-4">Status</th>
-                <th className="py-2.5 px-4">Risk Level</th>
+                <th className="py-3 px-4">FDR Number</th>
+                <th className="py-3 px-4">Institution</th>
+                <th className="py-3 px-4">Bank</th>
+                <th className="py-3 px-4">Amount</th>
+                <th className="py-3 px-4">Maturity Date</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">Risk Level</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-white/5">
               {loadingPreview ? (
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-slate-400">Loading dataset preview...</td>
+                  <td colSpan={7} className="py-12 text-center text-slate-400">Loading dataset preview...</td>
                 </tr>
               ) : previewRows.map((r: any) => (
-                <tr key={r.id} className="hover:bg-slate-50">
-                  <td className="py-2.5 px-4 font-mono font-bold text-blue-900">{r.fdr_number}</td>
-                  <td className="py-2.5 px-4 font-medium text-slate-800 truncate max-w-[200px]">{r.institution_name}</td>
-                  <td className="py-2.5 px-4 text-slate-600">{r.bank_name}</td>
-                  <td className="py-2.5 px-4 font-bold text-slate-900">{formatCurrency(r.amount)}</td>
-                  <td className="py-2.5 px-4 font-mono text-slate-600">{r.maturity_date}</td>
-                  <td className="py-2.5 px-4"><Badge type="status" value={r.current_status} /></td>
-                  <td className="py-2.5 px-4"><Badge type="risk" value={r.risk_level} /></td>
+                <tr key={r.id} className="hover:bg-[#181C35] transition-colors">
+                  <td className="py-3 px-4 font-mono font-bold text-rose-300">{r.fdr_number}</td>
+                  <td className="py-3 px-4 font-medium text-white truncate max-w-[200px]">{r.institution_name}</td>
+                  <td className="py-3 px-4 text-slate-300">{r.bank_name}</td>
+                  <td className="py-3 px-4 font-bold text-white font-mono">{formatCurrency(r.amount)}</td>
+                  <td className="py-3 px-4 font-mono text-slate-400">{r.maturity_date}</td>
+                  <td className="py-3 px-4"><Badge type="status" value={r.current_status} /></td>
+                  <td className="py-3 px-4"><Badge type="risk" value={r.risk_level} /></td>
                 </tr>
               ))}
             </tbody>

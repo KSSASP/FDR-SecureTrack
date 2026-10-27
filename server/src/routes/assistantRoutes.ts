@@ -15,8 +15,9 @@ router.get('/status', authenticateToken, (req: Request, res: Response): void => 
   res.json({
     status: 'ONLINE',
     aiProvider: isConfigured ? 'google_gemini' : 'local_deterministic',
+    configured: isConfigured,
     geminiConfigured: isConfigured,
-    model: config.geminiModel || 'gemini-2.5-flash',
+    model: process.env.GEMINI_MODEL || config.geminiModel || 'gemini-2.5-flash',
     supportedLanguages: ['en', 'ta']
   });
 });
@@ -57,6 +58,7 @@ router.post('/query', authenticateToken, async (req: Request, res: Response): Pr
           query: sanitizedQuery,
           language: effectiveLang,
           detectedIntent: geminiResult.detectedIntent,
+          answer: geminiResult.answerText,
           answerText: geminiResult.answerText,
           answerTamil: geminiResult.answerTamil,
           caseLinks: geminiResult.caseLinks,
@@ -93,6 +95,7 @@ router.post('/query', authenticateToken, async (req: Request, res: Response): Pr
       query: sanitizedQuery,
       language: localResult.language,
       detectedIntent: localResult.detectedIntent,
+      answer: finalAnswer,
       answerText: finalAnswer,
       answerTamil: localResult.answerTamil,
       caseLinks: localResult.caseLinks,

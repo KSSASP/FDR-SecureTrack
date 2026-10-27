@@ -122,19 +122,20 @@ export const RenewalTrackingPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-8">
       {/* Top Banner */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Renewal & Replacement Monitoring</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <div className="text-teal-400 text-xs font-bold uppercase tracking-wider mb-1">ENDORSEMENTS</div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Renewal & Replacement Monitoring</h1>
+          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
             Manages replacement instrument submissions, readiness checklists, and officer endorsement determinations.
           </p>
         </div>
         {isInstAdmin && (
           <button
             onClick={() => setIsInitiateModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors w-fit"
+            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white rounded-xl text-xs font-bold shadow-lg shadow-rose-500/25 transition-all w-fit"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Initiate Renewal Request</span>
@@ -145,89 +146,87 @@ export const RenewalTrackingPage: React.FC = () => {
       {/* Renewals List */}
       <div className="space-y-4">
         {loading ? (
-          <div className="bg-white p-12 text-center rounded-xl border border-slate-200">
-            <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+          <div className="bg-[#121528] p-16 text-center rounded-2xl border border-white/5 shadow-xl">
+            <div className="w-8 h-8 border-2 border-rose-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
             <p className="text-xs text-slate-400">Loading renewal workflows...</p>
           </div>
         ) : renewals.length === 0 ? (
-          <div className="bg-white p-12 text-center rounded-xl border border-slate-200 text-slate-400">
-            <RefreshCw className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-            <p className="font-semibold text-slate-700">No Renewal Requests On Record</p>
+          <div className="bg-[#121528] p-16 text-center rounded-2xl border border-white/5 text-slate-400 shadow-xl">
+            <RefreshCw className="w-10 h-10 text-slate-600 mx-auto mb-2" />
+            <p className="font-semibold text-white">No Renewal Requests On Record</p>
             <p className="text-xs text-slate-500 mt-0.5">Institutions can initiate renewal requests for instruments approaching maturity.</p>
           </div>
         ) : (
           renewals.map((r: any) => (
-            <div key={r.id} className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-sm text-blue-900 font-mono">Case #{r.id}</span>
-                  <span className="text-slate-400">•</span>
-                  <span className="font-semibold text-slate-800 text-xs">{r.institution_name}</span>
+            <div key={r.id} className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/5 pb-3.5">
+                <div className="flex items-center gap-2.5">
+                  <span className="font-bold text-sm text-rose-300 font-mono">Case #{r.id}</span>
+                  <span className="text-slate-600">•</span>
+                  <span className="font-semibold text-white text-xs">{r.institution_name}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-500">Readiness:</span>
+                  <span className="text-xs text-slate-400">Readiness:</span>
                   <Badge type="readiness" value={r.readiness_status} />
                   <Badge type="status" value={r.status} />
                 </div>
               </div>
 
               {/* Old vs New comparison */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#15182D] p-4 rounded-xl border border-white/5 text-xs">
                 <div>
-                  <span className="text-[10px] font-bold text-slate-500 uppercase">Original Maturing FDR</span>
-                  <p className="font-mono font-bold text-slate-900 mt-0.5">{r.original_fdr_number}</p>
-                  <p className="text-slate-700 font-medium">{formatCurrency(r.original_amount)} • {r.original_bank}</p>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Original Maturing FDR</span>
+                  <p className="font-mono font-bold text-white mt-1">{r.original_fdr_number}</p>
+                  <p className="text-slate-300 font-medium">{formatCurrency(r.original_amount)} • {r.original_bank}</p>
                   <span className="text-[10px] text-slate-500 font-mono">Matured: {r.original_maturity}</span>
                 </div>
 
-                <div className="border-t sm:border-t-0 sm:border-l sm:pl-3 border-slate-200 pt-2 sm:pt-0">
-                  <span className="text-[10px] font-bold text-slate-500 uppercase">Replacement Renewed Instrument</span>
+                <div className="border-t sm:border-t-0 sm:border-l sm:pl-4 border-white/10 pt-3 sm:pt-0">
+                  <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">Replacement Renewed Instrument</span>
                   {r.replacement_fdr_number ? (
                     <>
-                      <p className="font-mono font-bold text-blue-900 mt-0.5">{r.replacement_fdr_number}</p>
-                      <p className="text-slate-700 font-medium">{formatCurrency(r.replacement_amount)} • {r.replacement_bank}</p>
-                      <span className="text-[10px] text-slate-500 font-mono">New Maturity: {r.replacement_maturity}</span>
+                      <p className="font-mono font-bold text-purple-300 mt-1">{r.replacement_fdr_number}</p>
+                      <p className="text-slate-200 font-medium">{formatCurrency(r.replacement_amount)} • {r.replacement_bank}</p>
+                      <span className="text-[10px] text-slate-400 font-mono">New Maturity: {r.replacement_maturity}</span>
                     </>
                   ) : (
-                    <p className="text-amber-800 font-medium mt-1">
+                    <p className="text-amber-300 font-medium mt-1">
                       Awaiting replacement FDR instrument upload by institution
                     </p>
                   )}
                 </div>
               </div>
 
-              <p className="text-xs text-slate-700">
-                <strong>Justification:</strong> {r.reason}
+              <p className="text-xs text-slate-300">
+                <strong className="text-rose-300">Justification:</strong> {r.reason}
               </p>
 
               {r.officer_comments && (
-                <div className="p-2.5 rounded bg-blue-50 border border-blue-200 text-blue-950 text-xs">
-                  <span className="font-semibold block text-[11px]">Officer Determination Comments:</span>
+                <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-200 text-xs">
+                  <span className="font-semibold block text-[11px] text-blue-300 mb-0.5">Officer Determination Comments:</span>
                   {r.officer_comments}
                 </div>
               )}
 
               {/* Action bar */}
-              <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-                <span className="text-slate-400 font-mono text-[11px]">Requested: {r.request_date}</span>
+              <div className="flex items-center justify-between pt-3 border-t border-white/5 text-xs">
+                <span className="text-slate-500 font-mono text-[11px]">Requested: {r.request_date}</span>
 
                 <div className="flex items-center gap-2">
                   {(!isInstAdmin || isSuperAdmin || isOfficer) && r.status === 'PENDING_REVIEW' && (
                     <button
-                      onClick={() => {
-                        setSelectedRenewal(r);
-                      }}
-                      className="px-3 py-1 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded shadow-2xs"
+                      onClick={() => setSelectedRenewal(r)}
+                      className="px-4 py-2 bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold rounded-xl shadow-md transition-all text-xs"
                     >
                       Record Officer Determination
                     </button>
                   )}
                   <button
                     onClick={() => navigate(`/fdrs/${r.original_fdr_id}`)}
-                    className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded border border-slate-300 flex items-center gap-1"
+                    className="px-3.5 py-1.5 bg-[#1A1D38] hover:bg-[#252A50] text-slate-300 font-semibold rounded-xl border border-white/10 flex items-center gap-1.5 transition-colors"
                   >
                     <span>View Case</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
@@ -245,11 +244,11 @@ export const RenewalTrackingPage: React.FC = () => {
       >
         <form onSubmit={handleReviewRenewal} className="space-y-4 text-xs">
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Determination</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Determination</label>
             <select
               value={reviewStatus}
               onChange={(e) => setReviewStatus(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs"
             >
               <option value="ACCEPTED">Accept Replacement Instrument (Endorse Renewal)</option>
               <option value="CORRECTION_REQUIRED">Demand Corrections / Clarifications from Institution</option>
@@ -258,29 +257,29 @@ export const RenewalTrackingPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Scrutiny Comments & Conditions</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Scrutiny Comments & Conditions</label>
             <textarea
               required
               rows={3}
               placeholder="State basis for endorsement or defects requiring correction..."
               value={officerComments}
               onChange={(e) => setOfficerComments(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs placeholder:text-slate-500"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
             <button
               type="button"
               onClick={() => setSelectedRenewal(null)}
-              className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium"
+              className="px-4 py-2 rounded-xl border border-white/10 text-slate-400 hover:text-white font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={savingReview}
-              className="px-4 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold shadow-md"
             >
               {savingReview ? 'Saving...' : 'Submit Determination'}
             </button>
@@ -297,11 +296,11 @@ export const RenewalTrackingPage: React.FC = () => {
       >
         <form onSubmit={handleInitiateRenewal} className="space-y-4 text-xs">
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Select Maturing FDR</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Select Maturing FDR</label>
             <select
               value={selectedOriginalFdrId}
               onChange={(e) => setSelectedOriginalFdrId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs"
             >
               <option value="">-- Choose Maturing Instrument --</option>
               {myFdrs.map((f: any) => (
@@ -313,29 +312,29 @@ export const RenewalTrackingPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Renewal Justification Reason</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Renewal Justification Reason</label>
             <textarea
               required
               rows={3}
               placeholder="e.g. Scheduled annual renewal of security deposit with updated bank interest term..."
               value={renewalReason}
               onChange={(e) => setRenewalReason(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-white focus:outline-none focus:border-rose-500 text-xs placeholder:text-slate-500"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
             <button
               type="button"
               onClick={() => setIsInitiateModalOpen(false)}
-              className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium"
+              className="px-4 py-2 rounded-xl border border-white/10 text-slate-400 hover:text-white font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={initiating || !selectedOriginalFdrId}
-              className="px-4 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold shadow-md"
             >
               {initiating ? 'Initiating...' : 'Submit Renewal Request'}
             </button>

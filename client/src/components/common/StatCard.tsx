@@ -1,5 +1,5 @@
 import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import { LucideIcon, ArrowUpRight } from 'lucide-react';
 
 interface StatCardProps {
   title: string;
@@ -18,57 +18,78 @@ export const StatCard: React.FC<StatCardProps> = ({
   variant = 'blue',
   onClick
 }) => {
-  const getStyles = () => {
+  const getVariantStyles = () => {
     switch (variant) {
       case 'emerald':
         return {
-          iconBg: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-          accent: 'border-l-emerald-600'
+          iconBg: 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25',
+          dot: 'bg-emerald-400',
+          accent: 'from-emerald-500/10 to-transparent'
         };
       case 'amber':
         return {
-          iconBg: 'bg-amber-50 text-amber-700 border-amber-200',
-          accent: 'border-l-amber-600'
+          iconBg: 'bg-amber-500/15 text-amber-400 border border-amber-500/25',
+          dot: 'bg-amber-400',
+          accent: 'from-amber-500/10 to-transparent'
         };
       case 'rose':
         return {
-          iconBg: 'bg-rose-50 text-rose-700 border-rose-200',
-          accent: 'border-l-rose-600'
+          iconBg: 'bg-rose-500/15 text-rose-400 border border-rose-500/25',
+          dot: 'bg-rose-400',
+          accent: 'from-rose-500/10 to-transparent'
         };
       case 'purple':
         return {
-          iconBg: 'bg-purple-50 text-purple-700 border-purple-200',
-          accent: 'border-l-purple-600'
+          iconBg: 'bg-purple-500/15 text-purple-400 border border-purple-500/25',
+          dot: 'bg-purple-400',
+          accent: 'from-purple-500/10 to-transparent'
         };
       default:
         return {
-          iconBg: 'bg-blue-50 text-blue-700 border-blue-200',
-          accent: 'border-l-blue-600'
+          iconBg: 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/25',
+          dot: 'bg-indigo-400',
+          accent: 'from-indigo-500/10 to-transparent'
         };
     }
   };
 
-  const styles = getStyles();
+  const styles = getVariantStyles();
 
   return (
     <div
       onClick={onClick}
-      className={`bg-white rounded-lg p-5 border border-slate-200 shadow-xs border-l-4 ${styles.accent} ${
-        onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''
+      className={`relative bg-[#121528] rounded-2xl p-5 border border-white/5 hover:border-white/15 shadow-xl transition-all duration-200 group overflow-hidden ${
+        onClick ? 'cursor-pointer hover:-translate-y-0.5 hover:bg-[#161A32]' : ''
       }`}
     >
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">{title}</p>
-          <p className="text-2xl font-bold text-slate-900 mt-1">{value}</p>
-        </div>
-        <div className={`p-2.5 rounded-lg border ${styles.iconBg}`}>
+      {/* Subtle background glow */}
+      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${styles.accent} rounded-full blur-2xl pointer-events-none opacity-40`} />
+
+      <div className="relative z-10 flex items-start justify-between">
+        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${styles.iconBg} shadow-inner`}>
           <Icon className="w-5 h-5" />
         </div>
+        {onClick && (
+          <span className="p-1 rounded-lg text-slate-500 group-hover:text-slate-300 group-hover:bg-white/5 transition-colors">
+            <ArrowUpRight className="w-4 h-4" />
+          </span>
+        )}
       </div>
-      {subtext && (
-        <p className="text-xs text-slate-500 mt-2 truncate font-normal">{subtext}</p>
-      )}
+
+      <div className="relative z-10 mt-4">
+        <h3 className="text-xs font-semibold text-slate-400 tracking-wide uppercase">
+          {title}
+        </h3>
+        <p className="text-2xl sm:text-3xl font-bold text-white tracking-tight mt-1 font-mono">
+          {value ?? 0}
+        </p>
+        {subtext && (
+          <p className="text-[11px] text-slate-400 mt-1.5 flex items-center gap-1.5">
+            <span className={`w-1.5 h-1.5 rounded-full ${styles.dot}`} />
+            <span className="truncate">{subtext}</span>
+          </p>
+        )}
+      </div>
     </div>
   );
 };

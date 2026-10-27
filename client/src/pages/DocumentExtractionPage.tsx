@@ -14,7 +14,8 @@ import {
   Download,
   RotateCw,
   Search,
-  ExternalLink
+  ExternalLink,
+  Layers
 } from 'lucide-react';
 
 export const DocumentExtractionPage: React.FC = () => {
@@ -134,18 +135,19 @@ export const DocumentExtractionPage: React.FC = () => {
   const extractions = selectedFdrData?.extractions || [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-8">
       {/* Top Banner */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Digital Document Extraction & Tampering Analysis</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <div className="text-teal-400 text-xs font-bold uppercase tracking-wider mb-1">DOCUMENT INTELLIGENCE</div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Digital Document Extraction & Tampering Analysis</h1>
+          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
             OCR/PDF parsing, field normalization, and side-by-side alteration indicator scrutiny.
           </p>
         </div>
         <button
           onClick={() => setIsUploadModalOpen(true)}
-          className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors w-fit"
+          className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white rounded-xl text-xs font-bold shadow-lg shadow-rose-500/25 transition-all w-fit"
         >
           <Upload className="w-4 h-4" />
           <span>Upload Document</span>
@@ -153,13 +155,13 @@ export const DocumentExtractionPage: React.FC = () => {
       </div>
 
       {/* Target FDR Selector */}
-      <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2">
-          <label className="font-semibold text-slate-700 whitespace-nowrap">Select Case Record:</label>
+      <div className="bg-[#121528] rounded-2xl p-4 sm:p-5 border border-white/5 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-3">
+          <label className="font-semibold text-slate-300 whitespace-nowrap">Select Case Record:</label>
           <select
             value={selectedFdrId}
             onChange={(e) => setSelectedFdrId(e.target.value)}
-            className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs text-slate-900 font-mono focus:outline-none focus:ring-1 focus:ring-blue-600 max-w-md truncate"
+            className="px-3.5 py-2 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-xs text-white font-mono focus:outline-none focus:border-rose-500 max-w-md truncate"
           >
             {fdrs.map((item: any) => (
               <option key={item.id} value={item.id}>
@@ -172,7 +174,7 @@ export const DocumentExtractionPage: React.FC = () => {
         {fdr && (
           <button
             onClick={() => navigate(`/fdrs/${fdr.id}`)}
-            className="text-blue-700 hover:text-blue-900 font-semibold flex items-center gap-1"
+            className="text-rose-400 hover:text-rose-300 font-semibold flex items-center gap-1.5 transition-colors self-start sm:self-auto"
           >
             <span>Open Complete Case File</span>
             <ExternalLink className="w-3.5 h-3.5" />
@@ -183,28 +185,29 @@ export const DocumentExtractionPage: React.FC = () => {
       {/* Documents & Extractions Review */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Document List */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs space-y-3">
-          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider border-b pb-2">
-            Archived Documents ({docs.length})
+        <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl space-y-4">
+          <h3 className="text-xs font-bold text-rose-300 uppercase tracking-wider border-b border-white/5 pb-2.5 flex items-center gap-2">
+            <Layers className="w-4 h-4 text-rose-400" />
+            <span>Archived Documents ({docs.length})</span>
           </h3>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {docs.length === 0 ? (
-              <p className="text-xs text-slate-400 py-6 text-center">No documents uploaded for this case yet.</p>
+              <p className="text-xs text-slate-400 py-8 text-center">No documents uploaded for this case yet.</p>
             ) : (
               docs.map((d: any) => (
-                <div key={d.id} className="p-3 rounded-lg border border-slate-200 bg-slate-50 text-xs space-y-2">
+                <div key={d.id} className="p-3.5 rounded-xl border border-white/5 bg-[#15182D] text-xs space-y-2.5">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <p className="font-bold text-slate-900 truncate max-w-[180px]">{d.original_filename}</p>
-                      <p className="text-[11px] text-slate-500">{d.document_type} • v{d.version}</p>
+                      <p className="font-bold text-white truncate max-w-[180px]">{d.original_filename}</p>
+                      <p className="text-[11px] text-slate-400">{d.document_type} • v{d.version}</p>
                     </div>
                     <Badge type="status" value={d.status} />
                   </div>
-                  <div className="flex items-center gap-1.5 pt-1 border-t border-slate-200">
+                  <div className="flex items-center gap-2 pt-2 border-t border-white/5">
                     <button
                       onClick={() => handleExtractDoc(d.id)}
                       disabled={extracting}
-                      className="px-2 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-semibold text-[11px] flex items-center gap-1"
+                      className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold text-[11px] flex items-center gap-1 shadow-sm"
                     >
                       <Sparkles className="w-3 h-3" />
                       <span>Extract</span>
@@ -213,7 +216,7 @@ export const DocumentExtractionPage: React.FC = () => {
                       href={`/api/documents/${d.id}/preview`}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-2 py-1 rounded bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300 text-[11px]"
+                      className="px-2.5 py-1 rounded-lg bg-[#1A1D38] text-slate-300 hover:bg-[#252A50] border border-white/10 text-[11px] transition-colors"
                     >
                       Preview
                     </a>
@@ -225,16 +228,16 @@ export const DocumentExtractionPage: React.FC = () => {
         </div>
 
         {/* Extraction Findings & Side-by-Side Review */}
-        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-xs lg:col-span-2 space-y-5">
-          <div className="flex items-center justify-between border-b pb-3">
+        <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl lg:col-span-2 space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/5 pb-3.5">
             <div>
-              <h3 className="text-sm font-bold text-slate-800">Extraction & Tampering Scrutiny</h3>
-              <p className="text-xs text-slate-500">Compares certified document values against the official repository submission.</p>
+              <h3 className="text-sm font-bold text-white tracking-wide">Extraction & Tampering Scrutiny</h3>
+              <p className="text-xs text-slate-400 mt-0.5">Compares certified document values against the official repository submission.</p>
             </div>
             {extractions.length > 0 && (
               <button
                 onClick={() => handleConfirmExtraction(extractions[0].document_id, extractions[0])}
-                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-xs"
+                className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md self-start sm:self-auto"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
                 <span>Confirm Official Values</span>
@@ -243,9 +246,9 @@ export const DocumentExtractionPage: React.FC = () => {
           </div>
 
           {extractions.length === 0 ? (
-            <div className="py-12 text-center text-slate-400">
-              <FileText className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-              <p className="font-semibold text-slate-700">No Document Extractions Yet</p>
+            <div className="py-16 text-center text-slate-400">
+              <FileText className="w-10 h-10 text-slate-600 mx-auto mb-2" />
+              <p className="font-semibold text-white">No Document Extractions Yet</p>
               <p className="text-xs text-slate-500 mt-0.5">Upload a certificate or click "Extract" to parse text and detect alteration flags.</p>
             </div>
           ) : (
@@ -253,30 +256,30 @@ export const DocumentExtractionPage: React.FC = () => {
               {/* Tampering Indicator Alerts */}
               {extractions[0].tampering_indicators && (
                 <div className="space-y-2">
-                  <p className="font-bold text-slate-700 uppercase tracking-wider text-[11px]">Integrity Indicators</p>
+                  <p className="font-bold text-slate-300 uppercase tracking-wider text-[11px]">Integrity Indicators</p>
                   {(() => {
                     try {
                       const indicators = JSON.parse(extractions[0].tampering_indicators);
                       return indicators.map((ind: any, iIdx: number) => (
                         <div
                           key={iIdx}
-                          className={`p-3 rounded-lg border flex items-start gap-3 ${
+                          className={`p-3.5 rounded-xl border flex items-start gap-3 ${
                             ind.severity === 'CRITICAL'
-                              ? 'bg-rose-50 border-rose-300 text-rose-950'
+                              ? 'bg-rose-500/15 border-rose-500/30 text-rose-200'
                               : ind.severity === 'WARNING'
-                              ? 'bg-amber-50 border-amber-300 text-amber-950'
-                              : 'bg-emerald-50 border-emerald-300 text-emerald-950'
+                              ? 'bg-amber-500/15 border-amber-500/30 text-amber-200'
+                              : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-200'
                           }`}
                         >
                           <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
                               <span className="font-bold text-xs">{ind.label}</span>
-                              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-white/70 border">
+                              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-black/40 border border-white/10">
                                 Field: {ind.field}
                               </span>
                             </div>
-                            <p className="mt-0.5 leading-relaxed">{ind.indicator}</p>
+                            <p className="mt-1 leading-relaxed text-slate-200">{ind.indicator}</p>
                             <p className="text-[11px] opacity-80 mt-1 font-normal">{ind.explanation}</p>
                           </div>
                         </div>
@@ -290,49 +293,49 @@ export const DocumentExtractionPage: React.FC = () => {
 
               {/* Side-by-side Fields Table */}
               <div>
-                <p className="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-2">Detailed Field Comparison</p>
-                <div className="overflow-x-auto border border-slate-200 rounded-lg">
+                <p className="font-bold text-slate-300 uppercase tracking-wider text-[11px] mb-2">Detailed Field Comparison</p>
+                <div className="overflow-x-auto border border-white/5 rounded-xl">
                   <table className="w-full text-left text-xs">
-                    <thead className="bg-slate-100 text-slate-600 font-semibold uppercase text-[10px]">
+                    <thead className="bg-[#0E1020] text-slate-400 font-semibold uppercase text-[10px]">
                       <tr>
-                        <th className="py-2.5 px-3">Field</th>
-                        <th className="py-2.5 px-3">Repository Submitted Value</th>
-                        <th className="py-2.5 px-3">Extracted Document Value</th>
-                        <th className="py-2.5 px-3">Status</th>
+                        <th className="py-3 px-3.5">Field</th>
+                        <th className="py-3 px-3.5">Repository Submitted Value</th>
+                        <th className="py-3 px-3.5">Extracted Document Value</th>
+                        <th className="py-3 px-3.5">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
+                    <tbody className="divide-y divide-white/5 bg-[#15182D]">
                       <tr>
-                        <td className="py-2.5 px-3 font-semibold text-slate-700">FDR Number</td>
-                        <td className="py-2.5 px-3 font-mono font-bold text-slate-900">{fdr?.fdr_number}</td>
-                        <td className="py-2.5 px-3 font-mono text-slate-900">{extractions[0].extracted_fdr_number || 'N/A'}</td>
-                        <td className="py-2.5 px-3 text-emerald-700 font-medium">Match</td>
+                        <td className="py-3 px-3.5 font-semibold text-slate-300">FDR Number</td>
+                        <td className="py-3 px-3.5 font-mono font-bold text-rose-300">{fdr?.fdr_number}</td>
+                        <td className="py-3 px-3.5 font-mono text-white">{extractions[0].extracted_fdr_number || 'N/A'}</td>
+                        <td className="py-3 px-3.5 text-emerald-400 font-medium">Match</td>
                       </tr>
                       <tr>
-                        <td className="py-2.5 px-3 font-semibold text-slate-700">Bank Name</td>
-                        <td className="py-2.5 px-3 text-slate-900">{fdr?.bank_name}</td>
-                        <td className="py-2.5 px-3 text-slate-900">{extractions[0].extracted_bank_name || 'N/A'}</td>
-                        <td className="py-2.5 px-3 text-emerald-700 font-medium">Match</td>
+                        <td className="py-3 px-3.5 font-semibold text-slate-300">Bank Name</td>
+                        <td className="py-3 px-3.5 text-white">{fdr?.bank_name}</td>
+                        <td className="py-3 px-3.5 text-white">{extractions[0].extracted_bank_name || 'N/A'}</td>
+                        <td className="py-3 px-3.5 text-emerald-400 font-medium">Match</td>
                       </tr>
                       <tr>
-                        <td className="py-2.5 px-3 font-semibold text-slate-700">Principal Amount</td>
-                        <td className="py-2.5 px-3 font-bold text-slate-900">{fdr ? `₹${fdr.amount?.toLocaleString('en-IN')}` : ''}</td>
-                        <td className="py-2.5 px-3 font-bold text-slate-900">
+                        <td className="py-3 px-3.5 font-semibold text-slate-300">Principal Amount</td>
+                        <td className="py-3 px-3.5 font-bold text-white font-mono">{fdr ? `₹${fdr.amount?.toLocaleString('en-IN')}` : ''}</td>
+                        <td className="py-3 px-3.5 font-bold text-white font-mono">
                           {extractions[0].extracted_amount ? `₹${extractions[0].extracted_amount?.toLocaleString('en-IN')}` : 'N/A'}
                         </td>
-                        <td className="py-2.5 px-3">
+                        <td className="py-3 px-3.5">
                           {extractions[0].extracted_amount && Math.abs(extractions[0].extracted_amount - fdr?.amount) > 1 ? (
-                            <span className="text-rose-700 font-bold">MISMATCH</span>
+                            <span className="text-rose-400 font-bold">MISMATCH</span>
                           ) : (
-                            <span className="text-emerald-700 font-medium">Match</span>
+                            <span className="text-emerald-400 font-medium">Match</span>
                           )}
                         </td>
                       </tr>
                       <tr>
-                        <td className="py-2.5 px-3 font-semibold text-slate-700">Maturity Date</td>
-                        <td className="py-2.5 px-3 font-mono text-slate-900">{fdr?.maturity_date}</td>
-                        <td className="py-2.5 px-3 font-mono text-slate-900">{extractions[0].extracted_maturity_date || 'N/A'}</td>
-                        <td className="py-2.5 px-3 text-emerald-700 font-medium">Valid</td>
+                        <td className="py-3 px-3.5 font-semibold text-slate-300">Maturity Date</td>
+                        <td className="py-3 px-3.5 font-mono text-white">{fdr?.maturity_date}</td>
+                        <td className="py-3 px-3.5 font-mono text-white">{extractions[0].extracted_maturity_date || 'N/A'}</td>
+                        <td className="py-3 px-3.5 text-emerald-400 font-medium">Valid</td>
                       </tr>
                     </tbody>
                   </table>
@@ -341,8 +344,8 @@ export const DocumentExtractionPage: React.FC = () => {
 
               {/* Raw OCR Text Snippet */}
               <div>
-                <p className="font-bold text-slate-700 uppercase tracking-wider text-[11px] mb-1">Raw Parsed Document Snippet</p>
-                <pre className="p-3 bg-slate-100 rounded-lg text-[10px] font-mono text-slate-700 overflow-x-auto whitespace-pre-wrap max-h-36">
+                <p className="font-bold text-slate-300 uppercase tracking-wider text-[11px] mb-1.5">Raw Parsed Document Snippet</p>
+                <pre className="p-3.5 bg-[#15182D] rounded-xl border border-white/5 text-[10px] font-mono text-slate-300 overflow-x-auto whitespace-pre-wrap max-h-36">
                   {extractions[0].raw_text}
                 </pre>
               </div>
@@ -360,11 +363,11 @@ export const DocumentExtractionPage: React.FC = () => {
       >
         <form onSubmit={handleUpload} className="space-y-4 text-xs">
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Target FDR Record</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Target FDR Record</label>
             <select
               value={selectedFdrId}
               onChange={(e) => setSelectedFdrId(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-xs text-white focus:outline-none focus:border-rose-500"
             >
               {fdrs.map((item: any) => (
                 <option key={item.id} value={item.id}>
@@ -375,11 +378,11 @@ export const DocumentExtractionPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Document Classification</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Document Classification</label>
             <select
               value={docType}
               onChange={(e) => setDocType(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-xs"
+              className="w-full px-3.5 py-2.5 bg-[#15182D] border border-[#2B2F4E] rounded-xl text-xs text-white focus:outline-none focus:border-rose-500"
             >
               <option value="FDR_CERTIFICATE">Fixed Deposit Receipt Certificate</option>
               <option value="BANK_CONFIRMATION">Bank Confirmation Letter</option>
@@ -388,28 +391,28 @@ export const DocumentExtractionPage: React.FC = () => {
           </div>
 
           <div>
-            <label className="block font-semibold text-slate-700 mb-1">Document File (PDF, PNG, JPG)</label>
+            <label className="block font-semibold text-slate-300 mb-1.5">Document File (PDF, PNG, JPG)</label>
             <input
               type="file"
               required
               accept=".pdf,.png,.jpg,.jpeg"
               onChange={(e) => setUploadFile(e.target.files?.[0] || null)}
-              className="w-full p-2 border border-slate-300 rounded-lg text-xs bg-slate-50"
+              className="w-full p-2.5 border border-[#2B2F4E] rounded-xl text-xs bg-[#15182D] text-slate-200"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-3 border-t border-white/10">
             <button
               type="button"
               onClick={() => setIsUploadModalOpen(false)}
-              className="px-3 py-1.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-100 font-medium"
+              className="px-4 py-2 rounded-xl border border-white/10 text-slate-400 hover:text-white font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={uploading || !uploadFile}
-              className="px-4 py-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 text-white font-bold"
+              className="px-5 py-2 rounded-xl bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 hover:opacity-95 text-white font-bold shadow-md"
             >
               {uploading ? 'Processing Extraction...' : 'Upload & Scrutinize'}
             </button>

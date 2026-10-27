@@ -80,26 +80,26 @@ export const VerificationWorkbenchPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Top Banner */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#121528] rounded-2xl p-6 border border-white/5 shadow-xl backdrop-blur-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight">Multi-Stage Verification Workbench</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <h1 className="text-xl font-bold text-white tracking-tight">Multi-Stage Verification Workbench</h1>
+          <p className="text-xs text-slate-400 mt-1">
             Interbank gateway confirmation, field scrutiny validation, and discrepancy resolution.
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
+          <span className="px-3.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold flex items-center gap-2 shadow-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>Gateway Adapter: SimulatedCoreBankingGateway-v2.1 Active</span>
           </span>
         </div>
       </div>
 
       {/* Cases Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
+      <div className="bg-[#121528] rounded-2xl border border-white/5 shadow-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-100/80 border-b border-slate-200 text-slate-600 font-semibold uppercase text-[11px]">
+            <thead className="bg-[#15182D] border-b border-white/5 text-slate-400 font-semibold uppercase text-[11px] tracking-wider">
               <tr>
                 <th className="py-3 px-4">FDR Number</th>
                 <th className="py-3 px-4">Institution Name</th>
@@ -110,11 +110,11 @@ export const VerificationWorkbenchPage: React.FC = () => {
                 <th className="py-3 px-4 text-right">Scrutiny Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-white/5">
               {loading ? (
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-400">
-                    <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                    <div className="w-8 h-8 border-3 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
                     Loading verification records...
                   </td>
                 </tr>
@@ -126,18 +126,18 @@ export const VerificationWorkbenchPage: React.FC = () => {
                 </tr>
               ) : (
                 fdrs.map((item: any) => (
-                  <tr key={item.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-3 px-4 font-mono font-bold text-blue-900">
+                  <tr key={item.id} className="hover:bg-white/[0.02] transition-colors">
+                    <td className="py-3 px-4 font-mono font-bold text-indigo-400">
                       {item.fdr_number}
                     </td>
-                    <td className="py-3 px-4 text-slate-800 font-medium truncate max-w-[200px]">
+                    <td className="py-3 px-4 text-white font-medium truncate max-w-[200px]">
                       {item.institution_name}
                     </td>
-                    <td className="py-3 px-4 text-slate-600">
-                      <div className="font-semibold text-slate-800">{item.bank_name}</div>
-                      <div className="text-[11px] text-slate-500">{item.branch_name}</div>
+                    <td className="py-3 px-4 text-slate-300">
+                      <div className="font-semibold text-white">{item.bank_name}</div>
+                      <div className="text-[11px] text-slate-400">{item.branch_name}</div>
                     </td>
-                    <td className="py-3 px-4 font-bold text-slate-900">
+                    <td className="py-3 px-4 font-bold font-mono text-white">
                       {formatCurrency(item.amount)}
                     </td>
                     <td className="py-3 px-4">
@@ -147,18 +147,18 @@ export const VerificationWorkbenchPage: React.FC = () => {
                       <Badge type="status" value={item.current_status} />
                     </td>
                     <td className="py-3 px-4 text-right whitespace-nowrap">
-                      <div className="flex items-center justify-end gap-1.5">
+                      <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleVerifyBank(item.id)}
                           disabled={verifyingId === item.id}
-                          className="px-2.5 py-1 text-xs font-semibold text-white bg-blue-700 hover:bg-blue-800 rounded shadow-2xs transition-colors flex items-center gap-1"
+                          className="px-3 py-1.5 text-xs font-semibold text-white bg-gradient-to-r from-amber-400 via-rose-500 to-purple-600 rounded-xl shadow-lg shadow-rose-900/20 hover:opacity-90 transition-opacity flex items-center gap-1.5 disabled:opacity-50"
                         >
                           <ShieldCheck className="w-3.5 h-3.5" />
                           <span>{verifyingId === item.id ? 'Connecting...' : 'Verify Bank'}</span>
                         </button>
                         <button
                           onClick={() => navigate(`/fdrs/${item.id}`)}
-                          className="px-2.5 py-1 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 rounded border border-blue-200 transition-colors flex items-center gap-1"
+                          className="px-3 py-1.5 text-xs font-semibold text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 rounded-xl border border-indigo-500/30 transition-colors flex items-center gap-1.5"
                         >
                           <Eye className="w-3.5 h-3.5" />
                           <span>View FDR</span>
