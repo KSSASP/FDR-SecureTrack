@@ -1,4 +1,11 @@
-const API_BASE = '/api';
+function getApiBaseUrl(): string {
+  const envUrl = ((import.meta as any).env?.VITE_API_BASE_URL || '').trim();
+  if (!envUrl) return '/api';
+  const clean = envUrl.replace(/\/+$/, '');
+  return clean.endsWith('/api') ? clean : `${clean}/api`;
+}
+
+export const API_BASE = getApiBaseUrl();
 
 export function getAuthToken(): string | null {
   return localStorage.getItem('fdr_token');
@@ -6,12 +13,12 @@ export function getAuthToken(): string | null {
 
 export function getDocumentPreviewUrl(docId: string): string {
   const token = localStorage.getItem('fdr_token');
-  return `/api/documents/${docId}/preview${token ? `?token=${encodeURIComponent(token)}` : ''}`;
+  return `${API_BASE}/documents/${docId}/preview${token ? `?token=${encodeURIComponent(token)}` : ''}`;
 }
 
 export function getDocumentDownloadUrl(docId: string): string {
   const token = localStorage.getItem('fdr_token');
-  return `/api/documents/${docId}/download${token ? `?token=${encodeURIComponent(token)}` : ''}`;
+  return `${API_BASE}/documents/${docId}/download${token ? `?token=${encodeURIComponent(token)}` : ''}`;
 }
 
 export async function apiRequest<T = any>(
@@ -32,7 +39,8 @@ export async function apiRequest<T = any>(
     (headers as any)['Content-Type'] = 'application/json';
   }
 
-  const response = await fetch(`${API_BASE}${endpoint}`, {
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const response = await fetch(`${API_BASE}${cleanEndpoint}`, {
     ...options,
     headers
   });

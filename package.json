@@ -5,9 +5,12 @@
   "description": "FDR SecureTrack - Intelligent Security Deposit and Fixed Deposit Receipt Lifecycle Management",
   "scripts": {
     "dev": "concurrently -k -n \"SERVER,CLIENT\" -c \"blue,cyan\" \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "start": "npm start --prefix server",
     "server": "npm run dev --prefix server",
     "client": "npm run dev --prefix client",
     "build": "npm run build --prefix server && npm run build --prefix client",
+    "build:server": "npm run build --prefix server",
+    "build:client": "npm run build --prefix client",
     "seed": "npm run seed --prefix server",
     "test": "npm run test --prefix server",
     "install:all": "npm install && npm install --prefix server && npm install --prefix client"

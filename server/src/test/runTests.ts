@@ -746,7 +746,7 @@ export async function runAllTests() {
   // --------------------------------------------------------------------------
   const localQueryRes = await voiceAssistantService.processQuery(
     'Show FDRs maturing in the next 30 days',
-    { id: 'usr-admin-1', role: 'SUPER_ADMIN', name: 'Regulatory Admin', email: 'admin@fdrsecuretrack.gov.in' },
+    { id: 'usr-admin-1', role: 'SUPER_ADMIN', name: 'Regulatory Admin', email: 'admin@fdrsecuretrack.gov.in', institution_id: null },
     'en'
   );
 

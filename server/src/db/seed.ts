@@ -3,6 +3,7 @@ import path from 'path';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import { getDb, exec, run, query, saveDb } from './database.js';
+import { SCHEMA_SQL } from './schemaSql.js';
 import { pdfGeneratorService } from '../services/pdfGeneratorService.js';
 
 function addDays(baseDate: Date, days: number): string {
@@ -19,9 +20,7 @@ function subDays(baseDate: Date, days: number): string {
 
 export async function seedDatabase() {
   console.log('--- Initializing FDR SecureTrack Database Schema ---');
-  const schemaPath = path.resolve(__dirname, 'schema.sql');
-  const schemaSql = fs.readFileSync(schemaPath, 'utf-8');
-  await exec(schemaSql);
+  await exec(SCHEMA_SQL);
 
   // Clear existing demo data to ensure a clean, reproducible state
   console.log('--- Clearing prior demonstration records ---');

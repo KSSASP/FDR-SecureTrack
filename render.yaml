@@ -1,0 +1,77 @@
+services:
+  # 1. Full-Stack Unified Service (Runs both Express API and static React frontend)
+  - type: web
+    name: fdr-securetrack-app
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm run install:all && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: CLIENT_ORIGIN
+        value: http://localhost:5173
+      - key: DATABASE_PATH
+        value: ./data/fdr_securetrack.db
+      - key: UPLOAD_DIR
+        value: ./uploads
+      - key: ENABLE_SIMULATED_BANK_API
+        value: "true"
+      - key: MATURITY_REMINDER_WINDOWS
+        value: "90,60,30,15,7,1"
+      - key: ESCALATION_OVERDUE_DAYS
+        value: "14"
+
+  # 2. Standalone Backend API Service (For split architecture with Vercel frontend)
+  - type: web
+    name: fdr-securetrack-api
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm install --prefix server && npm run build --prefix server
+    startCommand: npm start --prefix server
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+      - key: CLIENT_ORIGIN
+        value: https://fdr-securetrack.vercel.app
+      - key: DATABASE_PATH
+        value: ./data/fdr_securetrack.db
+      - key: UPLOAD_DIR
+        value: ./uploads
+      - key: ENABLE_SIMULATED_BANK_API
+        value: "true"
+
+  # 3. Standalone Frontend Static Site
+  - type: web
+    name: fdr-securetrack-frontend
+    runtime: static
+    buildCommand: npm install --prefix client && npm run build --prefix client
+    staticPublishPath: client/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: fdr-securetrack-api
+          property: host

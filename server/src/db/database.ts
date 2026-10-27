@@ -5,6 +5,13 @@ import initSqlJs, { Database as SqlJsDatabase } from 'sql.js';
 let dbInstance: SqlJsDatabase | null = null;
 
 function resolveDbPaths(): { dbDir: string; dbPath: string } {
+  // Check environment variables for persistent volume mount (e.g. Render Disk /var/data/fdr_securetrack.db)
+  const envPath = process.env.DATABASE_PATH || process.env.DB_PATH;
+  if (envPath) {
+    const absPath = path.isAbsolute(envPath) ? envPath : path.resolve(process.cwd(), envPath);
+    return { dbDir: path.dirname(absPath), dbPath: absPath };
+  }
+
   // Check common execution paths
   const candidates = [
     path.resolve(process.cwd(), 'server', 'data'),

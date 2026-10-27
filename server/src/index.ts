@@ -4,7 +4,9 @@ import path from 'path';
 import fs from 'fs';
 import { config } from './config/env.js';
 import { getDb, saveDb } from './db/database.js';
+import { ensureDatabaseInitialized } from './db/init.js';
 import { pdfGeneratorService } from './services/pdfGeneratorService.js';
+import { geminiAssistantService } from './services/geminiService.js';
 
 // Route imports
 import authRoutes from './routes/authRoutes.js';
@@ -27,22 +29,58 @@ import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
-// Middleware
+// Dynamic production CORS configuration
+const allowedOrigins = [
+  config.clientOrigin,
+  process.env.FRONTEND_URL,
+  process.env.CLIENT_ORIGIN,
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:5000'
+].filter(Boolean).flatMap(o => (o as string).split(',').map(s => s.trim()));
+
 app.use(cors({
-  origin: [config.clientOrigin, 'http://localhost:5173', 'http://localhost:3000'],
-  credentials: true
+  origin: (requestOrigin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, server-to-server)
+    if (!requestOrigin) return callback(null, true);
+
+    // Exact match in allowed origins list
+    if (allowedOrigins.includes(requestOrigin)) {
+      return callback(null, true);
+    }
+
+    // Allow Vercel or Render preview domains
+    if (/^https:\/\/([a-zA-Z0-9_-]+\.)?vercel\.app$/.test(requestOrigin) ||
+        /^https:\/\/([a-zA-Z0-9_-]+\.)?onrender\.com$/.test(requestOrigin)) {
+      return callback(null, true);
+    }
+
+    // If development mode, permit any localhost origin
+    if (config.nodeEnv !== 'production' && requestOrigin.includes('localhost')) {
+      return callback(null, true);
+    }
+
+    console.warn(`[CORS Blocked] Origin not in allowed whitelist: ${requestOrigin}`);
+    callback(null, false);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 app.use(express.json({ limit: '20mb' }));
 app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 
-// Health Check
+// Health Check Endpoint
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'HEALTHY',
     service: 'FDR SecureTrack Backend API',
     timestamp: new Date().toISOString(),
-    version: '1.0.0'
+    version: '1.0.0',
+    environment: config.nodeEnv,
+    database: 'SQLITE_SQLJS_ACTIVE',
+    geminiConfigured: geminiAssistantService.isConfigured()
   });
 });
 
@@ -90,20 +128,14 @@ if (distPath) {
 // Initialize database and start HTTP server
 async function startServer() {
   try {
-    await getDb();
-    console.log('--- Connected to SQLite Database (fdr_securetrack.db) ---');
+    // Ensure database tables, indexes, and initial seeds are present without data loss
+    await ensureDatabaseInitialized();
+    console.log('--- Connected & Initialized SQLite Database (fdr_securetrack.db) ---');
 
-    // Preload and verify that all FDR documents exist on disk and in database
-    const preloadedCount = await pdfGeneratorService.ensureSeededDocumentsExist();
-    if (preloadedCount > 0) {
-      console.log(`--- Preloaded ${preloadedCount} synthetic FDR documents ---`);
-      saveDb();
-    }
-
-    app.listen(config.port, () => {
+    app.listen(config.port, '0.0.0.0', () => {
       console.log(`=======================================================`);
       console.log(`  FDR SecureTrack API Server running on port ${config.port}`);
-      console.log(`  Health Check: http://localhost:${config.port}/api/health`);
+      console.log(`  Health Check: http://0.0.0.0:${config.port}/api/health`);
       console.log(`  Mode: ${config.nodeEnv}`);
       console.log(`=======================================================`);
     });
